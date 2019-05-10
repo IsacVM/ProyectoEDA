@@ -1,0 +1,5 @@
+Intrucción de compilación hasta el momento:
+
+gcc -Wall -std=c99 -o go.out main.c DLL.c
+
+*Aun no utilizo Avion.c por eso no lo puse
