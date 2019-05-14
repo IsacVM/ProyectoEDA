@@ -1,4 +1,5 @@
 #include "DLL.h"
+#include "Avion.c"
 
 static NodePtr newNode( Item _data )
 {
@@ -383,7 +384,7 @@ void DLL_Traverse(DLL* this, void (*pfun)(Item) )
 {
 	assert( this );
 
-	for( NodePtr it = this->first; it != NULL; it = it->next){
+	for( NodePtr it = this->last; it != NULL; it = it->prev){
 		pfun( it->data );
 	}
 }

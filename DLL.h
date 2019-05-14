@@ -7,7 +7,7 @@
 #include "Avion.h"
 
 ///Estructura de nodos contenedores
-typedef struct Node     
+typedef struct Node
 {
 	Item data;          
 	struct Node* next; 
