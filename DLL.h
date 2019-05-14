@@ -1,10 +1,15 @@
+#ifndef _DLL_H_
+#define _DLL_H_
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
 #include <assert.h>
 #include <stdbool.h>
+#include <string.h>
 
 #include "Avion.h"
+
 
 ///Estructura de nodos contenedores
 typedef struct Node
@@ -100,4 +105,11 @@ izquierda de, ver o remover el nodo que cumple la condición.
 /**Esta funcion utiliza otra funcion simple para hacer una determinada tarea
  * en este caso imprimir los elementos de la lista
 */
+
+bool   DLL_Search(      DLL* this, char* _key );
+
+
+
 void   DLL_Traverse(    DLL* this, void (*pfun)(Item) );
+
+#endif 

@@ -132,25 +132,30 @@ bool DLL_InsertBefore( DLL* this, Item _data )
 bool DLL_Remove( DLL* this, ItemPtr _data_back )
 {
 	assert( this );
-
 	bool done = false;
 
-	if( !DLL_IsEmpty( this ) && NULL != this->cursor ){
-		done = true; 
-
+	if( !DLL_IsEmpty( this ) && this->cursor != NULL ){
+		done = true;
 		*_data_back = this->cursor->data;
 
 		NodePtr left = this->cursor->prev;
 		NodePtr right = this->cursor->next;
 		free( this->cursor );
+		this->cursor = NULL;
+        --this->len;
 
-		if( left == NULL && right == NULL ){
-			reset( this );
-		} else {
-			this->cursor = left;
-			this->cursor->next = right;
-			right->prev = this->cursor;
-			--this->len;
+		if( NULL == left && right == NULL ){ reset( this ); }
+		else if( NULL == right ){
+                left->next = NULL;
+                this->last = left;
+        }
+		else if( NULL == left){
+                right->prev = NULL;
+                this->first = right;
+        }
+		else{
+            left->next = right;
+            right->prev = left;
 		}
 	}
 	return done;
@@ -356,6 +361,28 @@ bool DLL_FindIf( DLL* this, Item _key, bool (*cmp)(Item, Item) )
   }
   return found;
 }
+
+
+bool DLL_Search( DLL* this, char* _key )
+{
+   assert( this );
+	bool found = false;
+
+	for( NodePtr it = this->first; it != NULL; it = it->next ){
+	    if( strcmp(_key,it->data._nombre)==0 ){
+
+	        this->cursor = it;
+    		found = true;
+    		break;
+		}
+	}
+	return found;
+
+}
+
+
+
+
 
 /*
 bool DLL_Search( DLL* this, Item _key )

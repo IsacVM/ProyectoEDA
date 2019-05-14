@@ -1,7 +1,11 @@
+#ifndef _AVION_H_
+#define _AVION_H_
+
 #include <stdlib.h>
 #include <stdbool.h>
 #include <assert.h>
 #include <stdio.h>
+#include <string.h>
 
 
 typedef struct
@@ -13,17 +17,16 @@ typedef struct
 	int hora_salida;//en segundos
 	int hora_llegada;//en segundos
 
-
 }Avion;
 
-//data para la lista DLL
 typedef Avion Item;
 typedef Item* ItemPtr;
+//data para la lista DLL
+
 
 void Avion_Reset(ItemPtr this);
+void Avion_Llenar(ItemPtr this);
 void Avion_Delete(ItemPtr this);
-
-
 
 
 
@@ -41,3 +44,5 @@ size_t   Avion_Len(      AvionPtr this );
 size_t   Avion_Capacity( AvionPtr this );
 bool     Avion_IsFull(   AvionPtr this );
 bool     Avion_chocar ( AvionPtr this);*/
+
+#endif
