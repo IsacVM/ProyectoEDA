@@ -380,6 +380,27 @@ bool DLL_Search( DLL* this, Item _key )
    return encontrado;
 }*/
 
+/*
+bool DLL_Search ( DLL* this, Item _key, bool (*cmp) (Item, Item) )
+
+{
+   assert( this );
+   bool found = false;
+   NodePtr it; 
+	
+   for( it = this->first; it != NULL; it = it->next ) 
+	{ 
+	   if ( cmp  ( _key, it->data ) )
+		{
+		   found = true; 
+		   this->cursor = it;
+		   break;
+		}    	
+	}
+	return found; 
+}
+
+
 void DLL_Traverse(DLL* this, void (*pfun)(Item) )
 {
 	assert( this );
