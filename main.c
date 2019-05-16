@@ -13,6 +13,15 @@ void Segundos_a_horas(Item this, int* _hora1, int* _minutos1,int* _hora2, int* _
 
 }
 
+int Horas_a_segundos (int horas,int minutos)
+{
+	horas=(horas*3600);
+	minutos=(minutos*60);
+	int segundos= horas+minutos ;
+	
+	return segundos; 
+}
+
 void imprime( Item item )
 {
   printf("Nombre: %s\n", item._nombre);
@@ -211,7 +220,51 @@ int main(void){
 
             case 8:
                 {
-                    printf("\t\tCargar aviones: \n");
+                    printf("\t\tCargar avion \n");
+                      
+                    Item aviNew; 
+                    
+                    printf ("\n Nombre: ");
+                    char name[20];  
+					          scanf ("%s", &aviNew._nombre);
+				
+                    printf ("\nPasajeros: ");
+					          int pasaj; 
+					          scanf ("%d",&pasaj ); 
+					          aviNew.pasajeros=pasaj;  
+					
+                    printf ("\nCapacidad: "); 
+                    int cap; 
+					          scanf ("%d",&cap); 
+					          aviNew.capacidad=cap; 
+					
+                    printf ("\nEstado (1=ocupado,2=disponible,3=dañado): ");
+                    int mode; 
+					          scanf ("%d",&mode );
+					          aviNew.estado=mode;  
+					
+					          printf ("\nHorario de salida \n Horas:   ");
+					          int hrs1; 
+					          scanf ("%d",&hrs1 );   
+                    printf ("Minutos: ");
+                    int min1; 
+                    scanf ("%d",&min1 );
+                    int seg1= Horas_a_segundos (hrs1,min1);
+                    aviNew.hora_salida=seg1; 
+
+					
+                    printf ("\nHorario de llegada\nHoras: ");
+                    int hrs2; 
+                    scanf ("%d",&hrs2 );  
+                    printf ("Minutos: ");
+                    int min2; 
+                    scanf ("%d",&min2 ); 
+                    int seg2= Horas_a_segundos (hrs2,min2); 
+                    aviNew.hora_llegada=seg2;
+
+
+                    DLL_InsertFront( disponible, aviNew);
+                     
                     break;
                 }
 
