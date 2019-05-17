@@ -2,6 +2,7 @@
 #include <stdbool.h>
 #include <assert.h>
 #include <stdio.h>
+#include <string.h>
 #include "DLL.h"
 //Funcion privada
 void Segundos_a_horas(Item this, int* _hora1, int* _minutos1,int* _hora2, int* _minutos2){
@@ -32,8 +33,8 @@ void imprime( Item item )
   if(item.estado==3)printf("Estado: Danado\n");
   int h1,m1,h2,m2;
   Segundos_a_horas(item,&h1,&m1,&h2,&m2);
-  printf("Hora salida: %d:%d\n",h1,m1);
-  printf("Hora llegada: %d:%d\n",h2,m2);
+  printf("Hora salida: %02d:%02d\n",h1,m1);
+  printf("Hora llegada: %02d:%02d\n",h2,m2);
   printf("\n\n");
 }
 
