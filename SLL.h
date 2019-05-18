@@ -27,7 +27,7 @@ typedef ItemI* ItemIPtr;
 /**
  * @typedef NodeS de tipo estructura autoreferenciada.
  * @struct NodeS referida a un nodo dinamico.
- * @brief Nodo con dato, enlaces anterior y posterior.
+ * @brief Nodo con dato, enlace posterior.
  */
 typedef struct NodeS{
     ItemI data;
