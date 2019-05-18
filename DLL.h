@@ -1,3 +1,11 @@
+/**
+ * @file DLL.h
+ * @Author Team
+ * @date mayo 2019
+ * @brief Proyecto - EDA-I
+ * @note Grupo: 0007, Semestre 2019-2
+ */
+
 #ifndef _DLL_H_
 #define _DLL_H_
 
@@ -11,7 +19,11 @@
 
 #include "Avion.h"
 
-///Estructura de nodos contenedores
+/**
+ * @typedef NodeS de tipo estructura autoreferenciada.
+ * @struct NodeS referida a un nodo dinamico.
+ * @brief Nodo con dato, enlaces anterior y posterior.
+ */
 typedef struct Node
 {
 	Item data;          
@@ -19,9 +31,16 @@ typedef struct Node
 	struct Node* prev; 
 } Node;               
 
+/**
+ * @typedef NodePtr Apuntador a nodo.
+ */
 typedef Node* NodePtr; 
 
-//Estructura de la lista enlazada doble
+/**
+ * @typedef DLL de tipo estructura.
+ * @struct DLL referida a una Lista.
+ * @brief Lista con apuntadores a nodos.
+ */
 typedef struct DLL
 {
 	NodePtr first;     
@@ -31,84 +50,199 @@ typedef struct DLL
 
 } DLL;
 
-/**Esta función crea una nueva lista DLL
-*/
-DLL*   DLL_New();
-/**Esta función borra una lista DLL
-*/
-void   DLL_Delete(      DLL* this );
-/**Inserta un elemento en el back de la lista
-*/
-bool   DLL_InsertBack(  DLL* this, Item _data );
-/**Inserta un elemento en el front de la lista
-*/
-bool   DLL_InsertFront( DLL* this, Item _data );
-/**Inserta un elemento a la derecha de donde apunte cursor
-*/
-bool   DLL_InsertAfter( DLL* this, Item _data );
-/**Inserta un elemento a la izquierda de donde apunte cursor.
-*/
-bool   DLL_InsertBefore(DLL* this, Item _data );
-/**Extrae el elemento a la izquierda de donde apunte cursor.
-*/
-bool   DLL_Remove(      DLL* this, ItemPtr _data_back );
-/**Extrae un elemento del front de la lista
-*/
-bool   DLL_RemoveFront( DLL* this, ItemPtr _data_back );
-/**Extrae un elemento del back de la lista.
-*/
-bool   DLL_RemoveBack(  DLL* this, ItemPtr _data_back );
-/**Extrae el elemento a la derecha de donde apunte cursor
-*/
-bool   DLL_RemoveAfter( DLL* this, ItemPtr _data_back );
-/**Extrae el elemento a la izquierda de donde apunte cursor
-*/
-bool   DLL_RemoveBefore(DLL* this, ItemPtr _data_back );
+
 /**
-Indica la cantidad de elementos actuales en la lista.
-*/
+ * @brief Crea una DLL.
+ * @return Apuntador a la DLL creada.
+ */
+DLL*   DLL_New();
+
+
+/**
+ *  @brief Borra una SLL.
+ ** @param this Puntero a DLL.
+ */ 
+void   DLL_Delete( DLL* this );
+
+
+
+/**
+ * @brief Inserta en el Back.
+ * @param this Puntero a DLL, _data valor a insertar.
+ * @return True si inserto, False si no.
+ */
+bool   DLL_InsertBack(  DLL* this, Item _data );
+
+
+
+/**
+ * @brief Inserta en el Front.
+ * @param this Puntero a DLL, _data valor a insertar.
+ * @return True si inserto, False si no.
+ */
+bool   DLL_InsertFront( DLL* this, Item _data );
+
+
+
+/**
+ * @brief Inserta a la derecha del cursor.
+ * @param this Puntero a DLL, _data valor a insertar.
+ * @return True si inserto, False si no.
+ */
+bool   DLL_InsertAfter( DLL* this, Item _data );
+
+
+
+/**
+ * @brief Inserta a la izquierda del cursor.
+ * @param this Puntero a DLL, _data valor a insertar.
+ * @return True si inserto, False si no.
+ */
+bool   DLL_InsertBefore(DLL* this, Item _data );
+
+
+
+/**
+ * @brief Extrae valor donde apunta cursor.
+ * @param this Puntero a DLL, _data_back valor devuelto.
+ * @return True si removio, False si no.
+ */
+bool   DLL_Remove(      DLL* this, ItemPtr _data_back );
+
+
+
+/**
+ * @brief Extrae valor en el Front.
+ * @param this Puntero a DLL, _data_back valor devuelto.
+ * @return True si removio, False si no.
+ */
+bool   DLL_RemoveFront( DLL* this, ItemPtr _data_back );
+
+
+
+/**
+ * @brief Extrae valor en el Back.
+ * @param this Puntero a DLL, _data_back valor devuelto.
+ * @return True si removio, False si no.
+ */
+bool   DLL_RemoveBack(  DLL* this, ItemPtr _data_back );
+
+
+
+/**
+ * @brief Extrae valor a la derecha de donde apunta cursor.
+ * @param this Puntero a DLL, _data_back valor devuelto.
+ * @return True si removio, False si no.
+ */
+bool   DLL_RemoveAfter( DLL* this, ItemPtr _data_back );
+
+
+
+/**
+ * @brief Extrae valor a la izquierda de donde apunta cursor.
+ * @param this Puntero a DLL, _data_back valor devuelto.
+ * @return True si removio, False si no.
+ */
+bool   DLL_RemoveBefore(DLL* this, ItemPtr _data_back );
+
+
+
+/**
+ * @brief Indica cantidad de elementos actuales en la DLL.
+ * @param this Puntero a DLL.
+ * @return Elementos o nodos en la DLL.
+ */
 size_t DLL_Len(         DLL* this );
-/**Indica si la lista está vacía.
-*/
+
+
+
+/**
+ * @brief Indica si esta vacia la DLL.
+ * @param this Puntero a DLL.
+ * @return True si esta vacia, False si no.
+ */
 bool   DLL_IsEmpty(     DLL* this );
-/**Vacía la lista.
-*/
+
+
+
+/**
+ * @brief Vacia la DLL.
+ * @param this Puntero a DLL.
+ */
 void   DLL_MakeEmpty(   DLL* this );
-/**Devuelve el valor asociado al nodo al cual apunta cursor. La lista no se altera.
-*/
+
+
+
+/**
+ * @brief Muestra el valor al que apunta el cursor. Sin alterar la lista
+ * @param this Puntero a DLL, _data_back el valor a mostrar.
+ * @return True si muestra valor, False si no.
+ */
 bool   DLL_Peek(        DLL* this, ItemPtr _data_back );
-/**Coloca al cursor al principio de la lista.
-*/
+
+
+
+/**
+ * @brief Coloca el cursor en First.
+ * @param this Puntero a DLL.
+ */
 void   DLL_CursorFirst( DLL* this );
-/**Coloca al cursor al final de la lista
-*/
+
+
+
+/**
+ * @brief Coloca el cursor en Last.
+ * @param this Puntero a DLL.
+ */
 void   DLL_CursorLast(  DLL* this );
-/**Mueve al cursor un nodo a la derecha de su posición actual. No hace nada si la lista
-estuviera vacía.
+
+
+
+/**
+ * @brief Mueve el cursor al siguiente nodo.
+ * @param this Puntero a DLL.
+ * @pre La lista no debe estar vacia
 */
 void   DLL_CursorNext(  DLL* this );
-/**Mueve al cursor un nodo a la izquierda de su posición actual. No hace nada si la lista
-estuviera vacía.
+
+
+
+/**
+ * @brief Regresa el cursor un nodo.
+ * @param this Puntero a DLL.
+ * @pre La lista no debe estar vacia
 */
 void   DLL_CursorPrev(  DLL* this );
-/**Recorre la lista buscando una coincidencia. Si la encuentra devuelve true; en caso
-contrario devuelve false. El cursor no es afectado. Esta función se utiliza cuando
-únicamente queremos saber si un valor está en la lista o no.
-*/
+
+
+
+/**
+ * @brief Busca valor en la DLL.
+ * @param this Puntero a DLL, _data valor a buscar.
+ * @return True si encontro, False si no.
+ * @post La pocision del cursor no se modifica.
+ */
 bool DLL_FindIf( DLL* this, Item _key, bool (*cmp)(Item s0, Item s1) );
-/**Recorre la lista buscando una coincidencia. Si la encuentra devuelve true y coloca al
-cursor en la posición correspondiente; en caso contrario devuelve false y el cursor no se
-modifica. Esta función se utiliza cuando queremos accesar, insertar a la derecha o
-izquierda de, ver o remover el nodo que cumple la condición.
-*/
+
+
+
+/**
+ * @brief Busca valor en la DLL
+ * @param this Puntero a DLL, _data valor a buscar.
+ * @return True si encontro, False si no.
+ * @post Coloca al cursor en el nodo donde encontro el valor. 
+ */
+
 //bool   DLL_Search(      DLL* this, Item _key );
 
 bool   DLL_Search(      DLL* this, char* _key );
 
-/**Esta funcion utiliza otra funcion simple para hacer una determinada tarea
- * en este caso imprimir los elementos de la lista
-*/
 
+
+/**
+ * @brief Realiza una funcion inyectada. En este caso: Imprimir.
+ * @param this Puntero a DLL, funcion a inyectar
+ */
 void   DLL_Traverse(    DLL* this, void (*pfun)(Item) );
 
-#endif 
+#endif // _DLL_H_
