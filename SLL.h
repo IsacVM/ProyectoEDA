@@ -15,29 +15,29 @@
 #include <assert.h>
 
 /**
- * @typedef Item tipo Entero para horarios
+ * @typedef ItemI tipo Entero para horarios
  */
-typedef int Item;
+typedef int ItemI;
 
 /**
- * @typedef ItemPtr Apuntador a tipo de dato.
+ * @typedef ItemIPtr Apuntador a tipo de dato.
  */
-typedef Item* ItemPtr;
+typedef ItemI* ItemIPtr;
 
 /**
- * @typedef Node de tipo estructura autoreferenciada.
- * @struct Node referida a un nodo dinamico.
+ * @typedef NodeS de tipo estructura autoreferenciada.
+ * @struct NodeS referida a un nodo dinamico.
  * @brief Nodo con dato, enlaces anterior y posterior.
  */
-typedef struct Node{
-    Item data;
-    struct Node* next;
-} Node;
+typedef struct NodeS{
+    ItemI data;
+    struct NodeS* next;
+} NodeS;
 
 /**
- * @typedef NodePtr Apuntador a nodo.
+ * @typedef NodeSPtrS Apuntador a nodo.
  */
-typedef Node* NodePtr;
+typedef NodeS* NodeSPtrS;
 
 /**
  * @typedef SLL de tipo estructura.
@@ -45,9 +45,9 @@ typedef Node* NodePtr;
  * @brief Lista con apuntadores a nodos.
  */
 typedef struct SLL{
-    NodePtr first;
-    NodePtr last;
-    NodePtr cursor;
+    NodeSPtrS first;
+    NodeSPtrS last;
+    NodeSPtrS cursor;
     size_t len;
 } SLL;
 
@@ -73,35 +73,35 @@ void SLL_Delete( SLLPtr this );
  * @param this Puntero a SLL, _data valor a insertar.
  * @return True si inserto, False si no.
  */
-bool SLL_InsertFront( SLLPtr this, Item _data );
+bool SLL_InsertFront( SLLPtr this, ItemI _data );
 
 /**
  * @brief Inserta en el Back.
  * @param this Puntero a SLL, _data valor a insertar.
  * @return True si inserto, False si no.
  */
-bool SLL_InsertBack( SLLPtr this, Item _data );
+bool SLL_InsertBack( SLLPtr this, ItemI _data );
 
 /**
  * @brief Inserta delante del cursor.
  * @param this Puntero a SLL, _data valor a insertar.
  * @return True si inserto, False si no.
  */
-bool SLL_InsertAfter( SLLPtr this, Item _data );
+bool SLL_InsertAfter( SLLPtr this, ItemI _data );
 
 /**
  * @brief Extrae valor en el Front.
  * @param this Puntero a SLL, _data_back valor devuelto.
  * @return True si removio, False si no.
  */
-bool SLL_RemoveFront( SLLPtr this, ItemPtr _data_back );
+bool SLL_RemoveFront( SLLPtr this, ItemIPtr _data_back );
 
 /**
  * @brief Muestra el valor al que apunta el cursor.
  * @param this Puntero a SLL, _data_back el valor a mostrar.
  * @return True si muestra valor, False si no.
  */
-bool SLL_Peek( SLLPtr this, ItemPtr _data_back );
+bool SLL_Peek( SLLPtr this, ItemIPtr _data_back );
 
 /**
  * @brief Indica cuantos elemtos hay en la SLL.
@@ -146,13 +146,13 @@ void SLL_CursorNext( SLLPtr this );
  * @param this Puntero a SLL, _data valor a buscar.
  * @return True si encontro, False si no.
  */
-bool SLL_FindIf( SLLPtr this, Item _data );
+bool SLL_FindIf( SLLPtr this, ItemI _data );
 
 /**
  * @brief Busca valor en la SLL y lo apunta con cursor.
  * @param this Puntero a SLL, _data valor a buscar.
  * @return True si encontro, False si no.
  */
-bool SLL_Search( SLLPtr this, Item _data );
+bool SLL_Search( SLLPtr this, ItemI _data );
 
 #endif  // _SLL_H_

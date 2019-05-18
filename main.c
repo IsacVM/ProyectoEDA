@@ -5,6 +5,8 @@
 #include <string.h>
 #include <time.h>
 #include "DLL.h"
+#include "Stack.h"
+
 //Funcion privada
 void Segundos_a_horas(Item this, int* _hora1, int* _minutos1,int* _hora2, int* _minutos2){
 
@@ -13,15 +15,6 @@ void Segundos_a_horas(Item this, int* _hora1, int* _minutos1,int* _hora2, int* _
  *_hora2=this.hora_llegada/3600;
  *_minutos2=(this.hora_llegada%3600)/60;
 
-}
-
-int Horas_a_segundos (int horas,int minutos)
-{
-	horas=(horas*3600);
-	minutos=(minutos*60);
-	int segundos= horas+minutos ;
-	
-	return segundos; 
 }
 
 void imprime( Item item )
@@ -45,7 +38,6 @@ int menu()
     while( 1 )
     {
         printf( "\n"
-
                 "\t\t\t1) Aviones para aterrizaje\n"
                 "\t\t\t2) Solicitar aterrizaje\n"
                 "\t\t\t3) Autorizar aterrizaje\n"
@@ -57,7 +49,6 @@ int menu()
                 "\t\t\t9) Ver lista de aviones danados\n"
                 "\t\t\t10) Reparar aviones\n"
                 "\t\t\t11) Fenomeno meterologico\n"
-
                 "\t\t\t0) Salir\n"
          	 );
 
@@ -82,6 +73,14 @@ int main(void){
     DLL* salida=DLL_New();
     DLL* sol_salida=DLL_New();
 
+    //pilas de horarios
+    StackPtr horarios_salida = Stack_New( 0 );
+    StackPtr horarios_llegada = Stack_New( 0 );
+
+    //llenando pilas de horarios
+    salidas_Init( horarios_salida );
+    llegadas_init( horarios_llegada );
+
     //aviones dañados
     Item avi1=(Avion){"BoingMX2",0,250,3,0,0};
     Item avi2=(Avion){"Airbus280",0,350,3,0,0};
@@ -95,14 +94,14 @@ int main(void){
     DLL_InsertFront( disponible, avi5);
   
     //aviones para aterrizaje
-    Item avi7=(Avion){"Aero1",150,300,1,37200,41400};
-    Item avi8=(Avion){"Aero2",250,320,1,38400,44400};
+    Item avi7=(Avion){"Aero1",150,300,1,Stack_Pop(horarios_salida),Stack_Pop(horarios_llegada)};
+    Item avi8=(Avion){"Aero2",250,320,1,Stack_Pop(horarios_salida),Stack_Pop(horarios_llegada)};
     DLL_InsertFront( entrada, avi7);
     DLL_InsertFront( entrada, avi8);
 
     //aviones para despegue
-    Item avi9=(Avion){"Aero3",100,300,1,48600,63600};
-    Item avi10=(Avion){"Aero4",110,200,1,49800,66600};
+    Item avi9=(Avion){"Aero3",100,300,1,Stack_Pop(horarios_salida),Stack_Pop(horarios_llegada)};
+    Item avi10=(Avion){"Aero4",110,200,1,Stack_Pop(horarios_salida),Stack_Pop(horarios_llegada)};
     DLL_InsertFront(salida, avi9);
     DLL_InsertFront(salida, avi10);
 
@@ -121,6 +120,8 @@ int main(void){
                     DLL_Delete(sol_entrada);
                     DLL_Delete(salida);
                     DLL_Delete(sol_salida);
+                    Stack_Delete( horarios_salida );
+                    Stack_Delete( horarios_llegada );
                 
                     return 0;
                 }
@@ -266,7 +267,7 @@ int main(void){
                         if( DLL_Search(disponible,nombre)==true){
                             Item temp;
                             DLL_Remove(disponible,&temp);
-                            Avion_Llenar(&temp);
+                            Avion_Llenar(&temp,Stack_Pop(horarios_llegada),Stack_Pop(horarios_salida));
                             DLL_InsertFront(salida,temp);
                             Avion_Delete(&temp);
                         }

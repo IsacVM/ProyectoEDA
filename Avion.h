@@ -25,7 +25,7 @@ typedef Item* ItemPtr;
 //data para la lista DLL
 
 void Avion_Reset(ItemPtr this);
-void Avion_Llenar(ItemPtr this);
+void Avion_Llenar(ItemPtr this,int _hora_llegada, int _hora_salida);
 void Avion_Delete(ItemPtr this);
 
 

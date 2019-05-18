@@ -5,8 +5,8 @@
 /**
  * @fn Funcion crea nodos dinamicos.
  */
-static NodePtr newNode( Item _data ){
-    NodePtr node = (NodePtr) malloc( sizeof(Node) );
+static NodeSPtrS newNode( ItemI _data ){
+    NodeSPtrS node = (NodeSPtrS) malloc( sizeof(NodeS) );
 
     if( node ){
         node->data = _data;
@@ -40,11 +40,11 @@ void SLL_Delete( SLLPtr this ){
     }
 }
 
-bool SLL_InsertFront( SLLPtr this, Item _data ){
+bool SLL_InsertFront( SLLPtr this, ItemI _data ){
     assert( this );
     bool done = false;
 
-    NodePtr node = newNode( _data );
+    NodeSPtrS node = newNode( _data );
     if( node ){
         done = true;
 
@@ -64,11 +64,11 @@ bool SLL_InsertFront( SLLPtr this, Item _data ){
     return done;
 }
 
-bool SLL_InsertBack( SLLPtr this, Item _data ){
+bool SLL_InsertBack( SLLPtr this, ItemI _data ){
     assert( this );
     bool done = false;
 
-    NodePtr node = newNode( _data );
+    NodeSPtrS node = newNode( _data );
     if( node ){
         done = true;
 
@@ -88,7 +88,7 @@ bool SLL_InsertBack( SLLPtr this, Item _data ){
     return done;
 }
 
-bool SLL_InsertAfter( SLLPtr this, Item _data ){
+bool SLL_InsertAfter( SLLPtr this, ItemI _data ){
     assert( this->cursor );
     bool done = false;
 
@@ -96,7 +96,7 @@ bool SLL_InsertAfter( SLLPtr this, Item _data ){
         done = SLL_InsertBack( this, _data);
     }
     else{
-        NodePtr node = newNode( _data );
+        NodeSPtrS node = newNode( _data );
 
         if( node ){
             done = true;
@@ -110,14 +110,14 @@ bool SLL_InsertAfter( SLLPtr this, Item _data ){
     return done;
 }
 
-bool SLL_RemoveFront( SLLPtr this, ItemPtr _data_back ){
+bool SLL_RemoveFront( SLLPtr this, ItemIPtr _data_back ){
     assert( this );
 
     if( SLL_IsEmpty( this ) ){ return false; }
 
     *_data_back = this->first->data;
 
-    NodePtr after = this->first->next;
+    NodeSPtrS after = this->first->next;
     free( this->first );
     this->first = after;
 
@@ -125,7 +125,7 @@ bool SLL_RemoveFront( SLLPtr this, ItemPtr _data_back ){
     return true;
 }
 
-bool SLL_Peek( SLLPtr this, ItemPtr _data_back ){
+bool SLL_Peek( SLLPtr this, ItemIPtr _data_back ){
     assert( this );
 
     if( SLL_IsEmpty( this ) ){  return false;  }
@@ -148,7 +148,7 @@ void SLL_MakeEmpty( SLLPtr this ){
     assert( this );
 
     while( !SLL_IsEmpty( this ) ){
-        NodePtr after = this->first->next;
+        NodeSPtrS after = this->first->next;
         free ( this->first );
         this->first = after;
     }
@@ -179,11 +179,11 @@ void SLL_CursorNext( SLL* this ){
     }
 }
 
-bool SLL_FindIf( SLLPtr this, Item _data ){
+bool SLL_FindIf( SLLPtr this, ItemI _data ){
     assert( this );
 
     bool found = false;
-    NodePtr it = this->first;
+    NodeSPtrS it = this->first;
 
     if( !SLL_IsEmpty( this) ){
         while( it->next != NULL ){
@@ -197,11 +197,11 @@ bool SLL_FindIf( SLLPtr this, Item _data ){
     return found;
 }
 
-bool SLL_Search( SLLPtr this, Item _data ){
+bool SLL_Search( SLLPtr this, ItemI _data ){
     assert( this );
 
     bool found = false;
-    NodePtr it = this->first;
+    NodeSPtrS it = this->first;
 
     if( !SLL_IsEmpty( this) ){
         while( it->next != NULL ){

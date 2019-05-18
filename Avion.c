@@ -8,7 +8,7 @@ void Avion_Reset(ItemPtr this){
 	 this->estado=2;
 }
 
-void Avion_Llenar(ItemPtr this){
+void Avion_Llenar(ItemPtr this,int _hora_llegada, int _hora_salida){
 
 	srand( time( 0 ) );
     // inicializamos al generador de números aleatorios
@@ -16,8 +16,8 @@ void Avion_Llenar(ItemPtr this){
 	 // genera un número aleatorio en el rango 0..capacidad del avion
 	 int value = rand() % capacidad;
      this->pasajeros=value;
-	 this->hora_llegada=7200;
-	 this->hora_salida=3600;
+	 this->hora_llegada=_hora_llegada;
+	 this->hora_salida=_hora_salida;
 	 this->estado=1;
 }
 

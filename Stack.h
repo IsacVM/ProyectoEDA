@@ -46,21 +46,21 @@ void Stack_Delete( StackPtr this );
  * @param this Apuntador a Pila, _value valor a insertar.
  * @return True si inserto, False si no.
  */
-bool Stack_Push( StackPtr this, Item _value );
+bool Stack_Push( StackPtr this, ItemI _value );
 
 /**
  * @brief Extrae de la Pila.
  * @param this Apuntador a Pila.
  * @return Valor extraido.
  */
-Item Stack_Pop( StackPtr this );
+ItemI Stack_Pop( StackPtr this );
 
 /**
  * @brief Muestra ultimo valor de la Pila.
  * @param this Apuntador a Pila.
  * @return Valor a mostrar.
  */
-Item Stack_Peek( StackPtr this );
+ItemI Stack_Peek( StackPtr this );
 
 /**
  * @brief Indica si esta vacia la Pila.
@@ -98,5 +98,8 @@ bool Stack_IsFull( StackPtr this );
  * @return Capacidad de la Pila.
  */
 size_t Stack_Capacity( StackPtr this );
+
+void salidas_Init( StackPtr this );
+void llegadas_init( StackPtr this );
 
 #endif  // _STACK_H_
