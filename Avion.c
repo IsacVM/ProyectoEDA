@@ -9,7 +9,13 @@ void Avion_Reset(ItemPtr this){
 }
 
 void Avion_Llenar(ItemPtr this){
-     this->pasajeros=100;
+
+	srand( time( 0 ) );
+    // inicializamos al generador de números aleatorios
+	 int capacidad=this->capacidad;
+	 // genera un número aleatorio en el rango 0..capacidad del avion
+	 int value = rand() % capacidad;
+     this->pasajeros=value;
 	 this->hora_llegada=7200;
 	 this->hora_salida=3600;
 	 this->estado=1;
@@ -21,8 +27,3 @@ void Avion_Delete(ItemPtr this){
         free( this );
     }
 }
-
-/*void Avion_sacarFrente(DLL* this, ItemPtr salir){
-     DLL_CursorLast(this);
-     DLL_RemoveBack(this,salir);
-}*/

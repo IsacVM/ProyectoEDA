@@ -370,7 +370,6 @@ bool DLL_Search( DLL* this, char* _key )
 
 	for( NodePtr it = this->first; it != NULL; it = it->next ){
 	    if( strcmp(_key,it->data._nombre)==0 ){
-
 	        this->cursor = it;
     		found = true;
     		break;
@@ -379,10 +378,6 @@ bool DLL_Search( DLL* this, char* _key )
 	return found;
 
 }
-
-
-
-
 
 /*
 bool DLL_Search( DLL* this, Item _key )
@@ -405,9 +400,7 @@ bool DLL_Search( DLL* this, Item _key )
 
     }
    return encontrado;
-}*/
-
-/*
+}
 bool DLL_Search ( DLL* this, Item _key, bool (*cmp) (Item, Item) )
 
 {
@@ -426,7 +419,7 @@ bool DLL_Search ( DLL* this, Item _key, bool (*cmp) (Item, Item) )
 	}
 	return found; 
 }
-
+*/
 
 void DLL_Traverse(DLL* this, void (*pfun)(Item) )
 {

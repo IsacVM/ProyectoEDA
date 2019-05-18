@@ -7,9 +7,9 @@
 #include <assert.h>
 #include <stdbool.h>
 #include <string.h>
+#include <time.h>
 
-
-
+#include "Avion.h"
 
 ///Estructura de nodos contenedores
 typedef struct Node
@@ -102,13 +102,12 @@ modifica. Esta función se utiliza cuando queremos accesar, insertar a la derech
 izquierda de, ver o remover el nodo que cumple la condición.
 */
 //bool   DLL_Search(      DLL* this, Item _key );
-/**Esta funcion utiliza otra funcion simple para hacer una determinada tarea
- * en este caso imprimir los elementos de la lista
-*/
 
 bool   DLL_Search(      DLL* this, char* _key );
 
-
+/**Esta funcion utiliza otra funcion simple para hacer una determinada tarea
+ * en este caso imprimir los elementos de la lista
+*/
 
 void   DLL_Traverse(    DLL* this, void (*pfun)(Item) );
 
