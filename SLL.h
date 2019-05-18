@@ -68,12 +68,17 @@ SLLPtr SLL_New( );
  */
 void SLL_Delete( SLLPtr this );
 
+
+
 /**
  * @brief Inserta en el Front.
  * @param this Puntero a SLL, _data valor a insertar.
  * @return True si inserto, False si no.
  */
 bool SLL_InsertFront( SLLPtr this, ItemI _data );
+
+
+
 
 /**
  * @brief Inserta en el Back.
@@ -89,12 +94,16 @@ bool SLL_InsertBack( SLLPtr this, ItemI _data );
  */
 bool SLL_InsertAfter( SLLPtr this, ItemI _data );
 
+
+
 /**
  * @brief Extrae valor en el Front.
  * @param this Puntero a SLL, _data_back valor devuelto.
  * @return True si removio, False si no.
  */
 bool SLL_RemoveFront( SLLPtr this, ItemIPtr _data_back );
+
+
 
 /**
  * @brief Muestra el valor al que apunta el cursor.
@@ -103,12 +112,16 @@ bool SLL_RemoveFront( SLLPtr this, ItemIPtr _data_back );
  */
 bool SLL_Peek( SLLPtr this, ItemIPtr _data_back );
 
+
+
 /**
  * @brief Indica cuantos elemtos hay en la SLL.
  * @param this Puntero a SLL.
  * @return Elementos o nodos en la SLL.
  */
 size_t SLL_Len( SLLPtr this );
+
+
 
 /**
  * @brief Indica si esta vacia la SLL.
@@ -117,11 +130,15 @@ size_t SLL_Len( SLLPtr this );
  */
 bool SLL_IsEmpty( SLLPtr this );
 
+
+
 /**
  * @brief Vacia la SLL.
  * @param this Puntero a SLL.
  */
 void SLL_MakeEmpty( SLLPtr this );
+
+
 
 /**
  * @brief Mueve el cursor a first.
@@ -129,28 +146,39 @@ void SLL_MakeEmpty( SLLPtr this );
  */
 void SLL_CursorFirst( SLLPtr this );
 
+
+
+
 /**
  * @brief Mueve el cursor a last.
  * @param this Puntero a SLL.
  */
 void SLL_CursorLast( SLLPtr this );
 
+
+
 /**
  * @brief Mueve el cursor al siguiente nodo.
+ * @pre cursor debe estar posicionado en algun nodo.
  * @param this Puntero a SLL.
  */
 void SLL_CursorNext( SLLPtr this );
 
+
+
 /**
  * @brief Busca valor en la SLL.
  * @param this Puntero a SLL, _data valor a buscar.
+ * @post Cursor no se modifica. 
  * @return True si encontro, False si no.
  */
 bool SLL_FindIf( SLLPtr this, ItemI _data );
 
+
 /**
- * @brief Busca valor en la SLL y lo apunta con cursor.
+ * @brief Busca valor en la SLL
  * @param this Puntero a SLL, _data valor a buscar.
+ * @post Cursor apunta al nodo donde encontro el valor.
  * @return True si encontro, False si no.
  */
 bool SLL_Search( SLLPtr this, ItemI _data );
