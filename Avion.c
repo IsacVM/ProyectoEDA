@@ -42,3 +42,11 @@ void Avion_Delete(ItemPtr this){
         free( this );
     }
 }
+
+
+void Avion_ResetHorario(ItemPtr this, int _hora_salida, int _hora_llegada){
+
+	this->hora_salida=_hora_salida;
+	this->hora_llegada=_hora_llegada;
+	 
+}

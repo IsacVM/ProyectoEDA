@@ -1,84 +1,103 @@
+/******         Pista.c         ******/
 #include "Pista.h"
-	#include <stdio.h>
-	#include <stdlib.h>
-	#include <stdbool.h>
-	#include <assert.h>
-	#include <stdbool.h>
-	#include <string.h>
+
+//Funcion privada para convertir Segundos a hora en formato hh:mm
+void Segundos_a_horas(Item this, int* _hora1, int* _minutos1,int* _hora2, int* _minutos2){
+
+ *_hora1=this.hora_salida/3600;
+ *_minutos1=(this.hora_salida%3600)/60;
+ *_hora2=this.hora_llegada/3600;
+ *_minutos2=(this.hora_llegada%3600)/60;
+
+}
+//Función privada para imprimir aviones
+void imprime( Item item )
+{
+  printf("Nombre: %s\n", item._nombre);
+  printf("Pasajeros: %d\n",item.pasajeros);
+  printf("Capacidad: %d\n", item.capacidad);
+  if(item.estado==1)printf("Estado: Ocupado\n");
+  if(item.estado==2)printf("Estado: Disponible\n");
+  if(item.estado==3)printf("Estado: Danado\n");
+  int h1,m1,h2,m2;
+  Segundos_a_horas(item,&h1,&m1,&h2,&m2);
+  printf("Hora salida: %02d:%02d\n",h1,m1);
+  printf("Hora llegada: %02d:%02d\n",h2,m2);
+  printf("\n\n");
+}
 
 
+PistaPtr Pista_New(	 int _capacidad){
+	PistaPtr n_pista=(PistaPtr)malloc(sizeof(Pista));
 
-	Pista* Pista_New(	 int _capacidad){
-		n_pista=(pista*)malloc(sizeof(pista));
+	if(n_pista){
 		n_pista->track=DLL_New();
-		n_pista->capacidad=_capacidad;
-		n_pista->espacio_libre=_capacidad;
-		return n_pista;
-	}
-	//aterriza el avion, si si pudo aterrizar true
-	bool Pista_Landing(	 Pista this,Avion _avion){
-		bool check = false;
-		DLL_InsertBack(this,avion);
-		if (DLL_InsertBack(this,avion)){
-			check=true;
-			this->espacio_libre--;
-		}
-		return check;
-	}
-	//despega un avion, sipudo, true
-	bool Pista_Takeoff(	 Pista this){
 
-		bool check = false;
-		Avion salida;
-		DLL_RemoveFront(this,*salida);
-		if (DLL_RemoveFront(this,*salida)){
-			printf("salió el avión: %s \n",salida->nombre );
-			check=true;
-			this->espacio_libre++;
-		}
-		return check;
-
-	}
-	//imprime los datos de la pista/la pista completa
-
-	/*
-			char _nombre[20];
-	int pasajeros;
-	int capacidad;
-	int estado;//1=ocupado,2=disponnible,3=dañado
-	int hora_salida;//en segundos
-	int hora_llegada;//en segundos
-
-		Avion_Imprimir(Avion this){
-			
-			string salida=conversion_segundos(this->hora_salida);
-			string llegada=conversion_segundos(this->hora_llegada);
-
-			string status;
-			switch(this->estado):
-			case 1:
-				status="ocupado";
-			break;
-			case 2:
-				status="disponible";
-			break;
-			case 3:
-				status="dañado";
-			break;
-
-			printf("/////%s",this->nombre);
-			printf("\n capacidad : %d estado : %s\n llegada : %s \n salida : %s",this->capacidad,status,llegada,salida);
+		if(n_pista->track){
+			n_pista->capacidad=_capacidad;
+			n_pista->espacio_libre=_capacidad;
 		}
 
-	*/
-	void Pista_Imprimir( Pista this){
-		//no se como se tiene que integrar el apuntador al traverse que tenemos
-		DLL_Traverse(this->track,*Avion_Imprimir());
 	}
+	
+	return n_pista;
+}
+//aterriza el avion, si si pudo aterrizar true
+bool Pista_Landing(	PistaPtr this,Item _avion){
 
-	void Pista_Delete(	 Pista this){
-
-		DLL_Delete(this->track);
-		free(this);
+	assert( this );
+	
+	bool done=false;
+	if (DLL_InsertFront(this->track,_avion)){
+		done=true;
+		this->espacio_libre--;
 	}
+	return done;
+}
+//despega un avion, si pudo, true
+bool Pista_Takeoff(	PistaPtr this,ItemPtr _avion){
+	assert( this );
+	bool done=false;
+	Item salida;
+	if(DLL_RemoveBack(this->track,&salida)){
+		//printf("salio el avion: %s \n",salida._nombre );
+		done=true;
+		this->espacio_libre++;
+	}
+	*_avion=salida;
+	//liberamos memoria
+	Avion_Delete(&salida);
+
+	return done;
+
+}
+
+void Pista_Imprimir( PistaPtr this){
+	assert( this );
+	DLL_Traverse(this->track,imprime);
+}
+
+void Pista_Delete(PistaPtr this){
+	assert( this );
+	DLL_Delete(this->track);
+	free(this);
+}
+
+bool Pista_IsEmpty( PistaPtr this ){
+    assert( this );
+    return DLL_IsEmpty( this->track );
+}
+
+void Pista_Peek( PistaPtr this,ItemPtr _avion ){
+    assert( !DLL_IsEmpty( this->track ) );
+
+    Item value;
+    DLL_CursorLast( this->track );
+    DLL_Peek( this->track, &value );
+
+	*_avion=value;
+
+	Avion_Delete(&value);
+    
+}
 
