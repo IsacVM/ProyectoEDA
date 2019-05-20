@@ -337,21 +337,6 @@ void DLL_CursorPrev( DLL* this )
 	}
 }
 
-/*bool DLL_FindIf( DLL* this, Item _key )
-{
-	assert( this );
-
-	bool found = false;
-	
-	for( NodePtr it = this->first; it != NULL; it = it->next ){
-		if( _key == it->data ){
-			found = true;
-			break;
-		}
-	}
-	return found;
-}*/
-
 bool DLL_FindIf( DLL* this, Item _key, bool (*cmp)(Item, Item) )
 {
   assert( this );

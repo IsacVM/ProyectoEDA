@@ -67,5 +67,7 @@ void Avion_Llenar(ItemPtr this,int _hora_llegada, int _hora_salida);
  */
 void Avion_Delete(ItemPtr this);
 
+void Avion_ResetHorario(ItemPtr this, int _hora_salida, int _hora_llegada);
 
-#endif  // _AVION_H_
+#endif // _AVION_H_
+

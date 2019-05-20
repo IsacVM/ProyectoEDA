@@ -13,7 +13,6 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <assert.h>
-#include <stdbool.h>
 #include <string.h>
 #include <time.h>
 
@@ -50,19 +49,20 @@ typedef struct DLL
 
 } DLL;
 
+typedef DLL* DLLPtr;
 
 /**
  * @brief Crea una DLL.
  * @return Apuntador a la DLL creada.
  */
-DLL*   DLL_New();
+DLLPtr   DLL_New();
 
 
 /**
  *  @brief Borra una SLL.
- ** @param this Puntero a DLL.
+ * @param this Puntero a DLL.
  */ 
-void   DLL_Delete( DLL* this );
+void   DLL_Delete( DLLPtr this );
 
 
 
@@ -71,7 +71,7 @@ void   DLL_Delete( DLL* this );
  * @param this Puntero a DLL, _data valor a insertar.
  * @return True si inserto, False si no.
  */
-bool   DLL_InsertBack(  DLL* this, Item _data );
+bool   DLL_InsertBack(  DLLPtr this, Item _data );
 
 
 
@@ -80,7 +80,7 @@ bool   DLL_InsertBack(  DLL* this, Item _data );
  * @param this Puntero a DLL, _data valor a insertar.
  * @return True si inserto, False si no.
  */
-bool   DLL_InsertFront( DLL* this, Item _data );
+bool   DLL_InsertFront( DLLPtr this, Item _data );
 
 
 
@@ -89,7 +89,7 @@ bool   DLL_InsertFront( DLL* this, Item _data );
  * @param this Puntero a DLL, _data valor a insertar.
  * @return True si inserto, False si no.
  */
-bool   DLL_InsertAfter( DLL* this, Item _data );
+bool   DLL_InsertAfter( DLLPtr this, Item _data );
 
 
 
@@ -98,7 +98,7 @@ bool   DLL_InsertAfter( DLL* this, Item _data );
  * @param this Puntero a DLL, _data valor a insertar.
  * @return True si inserto, False si no.
  */
-bool   DLL_InsertBefore(DLL* this, Item _data );
+bool   DLL_InsertBefore(DLLPtr this, Item _data );
 
 
 
@@ -107,7 +107,7 @@ bool   DLL_InsertBefore(DLL* this, Item _data );
  * @param this Puntero a DLL, _data_back valor devuelto.
  * @return True si removio, False si no.
  */
-bool   DLL_Remove(      DLL* this, ItemPtr _data_back );
+bool   DLL_Remove(      DLLPtr this, ItemPtr _data_back );
 
 
 
@@ -116,7 +116,7 @@ bool   DLL_Remove(      DLL* this, ItemPtr _data_back );
  * @param this Puntero a DLL, _data_back valor devuelto.
  * @return True si removio, False si no.
  */
-bool   DLL_RemoveFront( DLL* this, ItemPtr _data_back );
+bool   DLL_RemoveFront( DLLPtr this, ItemPtr _data_back );
 
 
 
@@ -125,7 +125,7 @@ bool   DLL_RemoveFront( DLL* this, ItemPtr _data_back );
  * @param this Puntero a DLL, _data_back valor devuelto.
  * @return True si removio, False si no.
  */
-bool   DLL_RemoveBack(  DLL* this, ItemPtr _data_back );
+bool   DLL_RemoveBack(  DLLPtr this, ItemPtr _data_back );
 
 
 
@@ -134,7 +134,7 @@ bool   DLL_RemoveBack(  DLL* this, ItemPtr _data_back );
  * @param this Puntero a DLL, _data_back valor devuelto.
  * @return True si removio, False si no.
  */
-bool   DLL_RemoveAfter( DLL* this, ItemPtr _data_back );
+bool   DLL_RemoveAfter( DLLPtr this, ItemPtr _data_back );
 
 
 
@@ -143,7 +143,7 @@ bool   DLL_RemoveAfter( DLL* this, ItemPtr _data_back );
  * @param this Puntero a DLL, _data_back valor devuelto.
  * @return True si removio, False si no.
  */
-bool   DLL_RemoveBefore(DLL* this, ItemPtr _data_back );
+bool   DLL_RemoveBefore(DLLPtr this, ItemPtr _data_back );
 
 
 
@@ -152,7 +152,7 @@ bool   DLL_RemoveBefore(DLL* this, ItemPtr _data_back );
  * @param this Puntero a DLL.
  * @return Elementos o nodos en la DLL.
  */
-size_t DLL_Len(         DLL* this );
+size_t DLL_Len(         DLLPtr this );
 
 
 
@@ -161,7 +161,7 @@ size_t DLL_Len(         DLL* this );
  * @param this Puntero a DLL.
  * @return True si esta vacia, False si no.
  */
-bool   DLL_IsEmpty(     DLL* this );
+bool   DLL_IsEmpty(     DLLPtr this );
 
 
 
@@ -169,7 +169,7 @@ bool   DLL_IsEmpty(     DLL* this );
  * @brief Vacia la DLL.
  * @param this Puntero a DLL.
  */
-void   DLL_MakeEmpty(   DLL* this );
+void   DLL_MakeEmpty(   DLLPtr this );
 
 
 
@@ -178,7 +178,7 @@ void   DLL_MakeEmpty(   DLL* this );
  * @param this Puntero a DLL, _data_back el valor a mostrar.
  * @return True si muestra valor, False si no.
  */
-bool   DLL_Peek(        DLL* this, ItemPtr _data_back );
+bool   DLL_Peek(        DLLPtr this, ItemPtr _data_back );
 
 
 
@@ -186,7 +186,7 @@ bool   DLL_Peek(        DLL* this, ItemPtr _data_back );
  * @brief Coloca el cursor en First.
  * @param this Puntero a DLL.
  */
-void   DLL_CursorFirst( DLL* this );
+void   DLL_CursorFirst( DLLPtr this );
 
 
 
@@ -194,7 +194,7 @@ void   DLL_CursorFirst( DLL* this );
  * @brief Coloca el cursor en Last.
  * @param this Puntero a DLL.
  */
-void   DLL_CursorLast(  DLL* this );
+void   DLL_CursorLast(  DLLPtr this );
 
 
 
@@ -203,7 +203,7 @@ void   DLL_CursorLast(  DLL* this );
  * @param this Puntero a DLL.
  * @pre La lista no debe estar vacia
 */
-void   DLL_CursorNext(  DLL* this );
+void   DLL_CursorNext(  DLLPtr this );
 
 
 
@@ -212,7 +212,7 @@ void   DLL_CursorNext(  DLL* this );
  * @param this Puntero a DLL.
  * @pre La lista no debe estar vacia
 */
-void   DLL_CursorPrev(  DLL* this );
+void   DLL_CursorPrev(  DLLPtr this );
 
 
 
@@ -222,7 +222,7 @@ void   DLL_CursorPrev(  DLL* this );
  * @return True si encontro, False si no.
  * @post La pocision del cursor no se modifica.
  */
-bool DLL_FindIf( DLL* this, Item _key, bool (*cmp)(Item s0, Item s1) );
+bool DLL_FindIf( DLLPtr this, Item _key, bool (*cmp)(Item s0, Item s1) );
 
 
 
@@ -232,17 +232,13 @@ bool DLL_FindIf( DLL* this, Item _key, bool (*cmp)(Item s0, Item s1) );
  * @return True si encontro, False si no.
  * @post Coloca al cursor en el nodo donde encontro el valor. 
  */
-
-//bool   DLL_Search(      DLL* this, Item _key );
-
-bool   DLL_Search(      DLL* this, char* _key );
-
+bool   DLL_Search(      DLLPtr this, char* _key );
 
 
 /**
  * @brief Realiza una funcion inyectada. En este caso: Imprimir.
  * @param this Puntero a DLL, funcion a inyectar
  */
-void   DLL_Traverse(    DLL* this, void (*pfun)(Item) );
+void   DLL_Traverse(    DLLPtr this, void (*pfun)(Item) );
 
 #endif // _DLL_H_
