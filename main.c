@@ -90,8 +90,10 @@ int main(void){
     //aviones dañados
     Item avi1=(Avion){"BoingMX2",0,250,3,0,0};
     Item avi2=(Avion){"Airbus280",0,350,3,0,0};
+    Item otro=(Avion){"Latam290",0,370,3,0,0};
     DLL_InsertFront( danados, avi1);
     DLL_InsertFront( danados, avi2);
+    DLL_InsertFront( danados, otro);
   
     //aviones disponibles
     Item avi4=(Avion){"BoingMZY",0,350,2,0,0};
@@ -385,12 +387,14 @@ int main(void){
                         {
                             printf("\n\tReparando todos...\n");
                             int i=0;
-                            while(i<=DLL_Len(danados)){
+                            int tama=DLL_Len(danados);
+                            while(i<tama){
                                 Item reparado;
                                 DLL_RemoveBack(danados,&reparado);
                                 Avion_Reset(&reparado);
                                 DLL_InsertFront(disponible,reparado);
                                 i++;
+                                printf("Valor de i: %d\n",i);
                                 Avion_Delete(&reparado);
                             }
 

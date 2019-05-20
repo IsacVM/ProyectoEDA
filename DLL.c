@@ -187,28 +187,31 @@ bool DLL_RemoveFront( DLL* this, ItemPtr _data_back )
 	return done;
 }
 
-bool DLL_RemoveBack( DLL* this, ItemPtr _data_back )
-{
+bool DLL_RemoveBack( DLLPtr this, ItemPtr _data_back ){
     assert( this );
 	bool done = false;
 
-	if(!DLL_IsEmpty( this ) ){
-		done = true;
-		//solo un elemento
-		if(this->first == this->last){
-			*_data_back = this->first->data;
-			reset(this);
-		}else{
+	if( !DLL_IsEmpty( this ) ){
+	    done = true;
+		*_data_back = this->last->data;
 
-			*_data_back = this->last->data;
-			NodePtr tmp = this->last->prev;
-			free(this->last);
-			this->last=tmp;	
-            --this->len;	
+		NodePtr tmp = this->last->prev;
+		free( this->last );
+		this->last = tmp;
+
+		if( this->last != NULL ){
+			this->last->next = NULL;
+			--this->len;
+		} else {
+			reset( this );
 		}
 	}
 	return done;
 }
+
+
+
+
 
 bool DLL_RemoveAfter( DLL* this, ItemPtr _data_back )
 {
