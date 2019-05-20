@@ -1,7 +1,8 @@
 /******         Pista.c         ******/
+
 #include "Pista.h"
 
-//Funcion privada para convertir Segundos a hora en formato hh:mm
+//Funcion privada para convertir Segundos a horas en formato (hh:mm)
 void Segundos_a_horas(Item this, int* _hora1, int* _minutos1,int* _hora2, int* _minutos2){
 
  *_hora1=this.hora_salida/3600;
@@ -42,7 +43,7 @@ PistaPtr Pista_New(	 int _capacidad){
 	
 	return n_pista;
 }
-//aterriza el avion, si si pudo aterrizar true
+
 bool Pista_Landing(	PistaPtr this,Item _avion){
 
 	assert( this );
@@ -54,17 +55,17 @@ bool Pista_Landing(	PistaPtr this,Item _avion){
 	}
 	return done;
 }
-//despega un avion, si pudo, true
+
 bool Pista_Takeoff(	PistaPtr this,ItemPtr _avion){
 	assert( this );
 	bool done=false;
 	Item salida;
 	if(DLL_RemoveBack(this->track,&salida)){
-		//printf("salio el avion: %s \n",salida._nombre );
 		done=true;
 		this->espacio_libre++;
 	}
 	*_avion=salida;
+	
 	//liberamos memoria
 	Avion_Delete(&salida);
 

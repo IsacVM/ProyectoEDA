@@ -63,7 +63,7 @@ void Stack_MakeEmpty( StackPtr this ){
     SLL_MakeEmpty( this->stack );
 }
 
-/*llenado de pilas de horarios*/
+/***  llenado de pilas de horarios   ***/
 
 void salidas_Init( StackPtr this ){
     //Abajo de 12 pm a 12 am

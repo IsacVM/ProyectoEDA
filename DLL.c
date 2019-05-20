@@ -367,48 +367,6 @@ bool DLL_Search( DLL* this, char* _key )
 
 }
 
-/*
-bool DLL_Search( DLL* this, Item _key )
-{
-   assert(this);
-   bool encontrado= false;
-   if(!DLL_IsEmpty(this)){
-       NodePtr tmp=this->cursor;
-       for(this->cursor=this->first;this->cursor->next!=NULL;this->cursor=this->cursor->next)
-        {
-           if(_key==this->cursor->data){
-               encontrado= true;
-           }
-
-       	}
-       //NO ENCONTRADO
-        if(!encontrado){
-           this->cursor=tmp;
-        }
-
-    }
-   return encontrado;
-}
-bool DLL_Search ( DLL* this, Item _key, bool (*cmp) (Item, Item) )
-
-{
-   assert( this );
-   bool found = false;
-   NodePtr it; 
-	
-   for( it = this->first; it != NULL; it = it->next ) 
-	{ 
-	   if ( cmp  ( _key, it->data ) )
-		{
-		   found = true; 
-		   this->cursor = it;
-		   break;
-		}    	
-	}
-	return found; 
-}
-*/
-
 void DLL_Traverse(DLL* this, void (*pfun)(Item) )
 {
 	assert( this );
@@ -417,4 +375,3 @@ void DLL_Traverse(DLL* this, void (*pfun)(Item) )
 		pfun( it->data );
 	}
 }
-

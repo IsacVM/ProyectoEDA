@@ -5,8 +5,8 @@
  * @brief Proyecto - EDA-I
  * @note Grupo: 0007, Semestre 2019-2
  */
-#ifndef _PILA_H_
-#define _PILA_H_
+#ifndef _PISTA_H_
+#define _PISTA_H_
 
 #include "DLL.h"
 
@@ -30,19 +30,46 @@ typedef Pista* PistaPtr;
 
 /**< tag::API_METODOS[] */
 
-//se crea una nueva pista
+/**
+ * @brief Crea una nueva pista
+ * @param capacidad de la pista
+ */
 PistaPtr Pista_New(	 int _capacidad);
-//aterriza el avion, si si pudo aterrizar true
+
+/**
+ * @brief Permite insertar un avión a una pista de aterrizaje
+ * @param apuntador a una 'Pista' y un 'Avion'
+ */
 bool Pista_Landing(	 PistaPtr this,Item _avion);
-//despega un avion, sipudo, true
+
+/**
+ * @brief Permite extraer un avión de una pista de despegue
+ * @param apuntador a una 'Pista' y apuntador a un 'Avion'
+ */
 bool Pista_Takeoff(	 PistaPtr this,ItemPtr _avion);
-//imprime los datos de la pista/la pista completa
+
+/**
+ * @brief Imprime los datos de la pista/la pista completa con sus aviones
+ * @param apuntador a una 'Pista'
+ */
 void Pista_Imprimir( PistaPtr this);
-//elimina la pista
+
+/**
+ * @brief Elimina una pista y sus elementos
+ * @param apuntador a una 'Pista'
+ */
 void Pista_Delete(	 PistaPtr this);
-//se revisa si la pista esta vacia
+
+/**
+ * @brief Revisa si la pista esta vacia
+ * @param apuntador a una 'Pista'
+ */
 bool Pista_IsEmpty( PistaPtr this );
-//funcion Peek(observar) para una pista
+
+/**
+ * @brief Nos permite observar y extraer el valor del ultimo 'Avion' de una pista, no lo elimina
+ * @param apuntador a una 'Pista' y apuntador a un 'Avion'
+ */
 void Pista_Peek( PistaPtr this,ItemPtr _avion );
 
 #endif // _PISTA_H_

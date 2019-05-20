@@ -41,12 +41,12 @@ typedef Avion Item;
  * @typedef ItemPtr aputador a tipo de dato.
  */
 typedef Item* ItemPtr;
-//data para la lista DLL
 
 
+/**< tag::API_METODOS[] */
 
 /**
- * @brief Resetea los valores hora_llegad,hora_salida,pasajeros
+ * @brief Resetea los valores hora_llegada,hora_salida,pasajeros
  *  y estado de un avion.
  * @param apuntador a tipo avion.
  */
@@ -67,7 +67,11 @@ void Avion_Llenar(ItemPtr this,int _hora_llegada, int _hora_salida);
  */
 void Avion_Delete(ItemPtr this);
 
+
+/**
+ * @brief Resetea los valores hora_salida y hora_llegada de un avion.
+ * @param apuntador a tipo Avion.
+ */
 void Avion_ResetHorario(ItemPtr this, int _hora_salida, int _hora_llegada);
 
 #endif // _AVION_H_
-
