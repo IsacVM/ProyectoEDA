@@ -2,7 +2,7 @@
 
 
 #include "DLL.h"
-#include "Avion.c"
+//#include "Avion.c"
 
 static NodePtr newNode( Item _data )
 {
@@ -107,10 +107,8 @@ bool DLL_InsertAfter( DLL* this, Item _data )
 	return done;
 }
 
-bool DLL_InsertBefore( DLL* this, Item _data )
-{
+bool DLL_InsertBefore( DLLPtr this, Item _data ){
     assert( this );
-
 	bool done = false;
 
 	if( DLL_IsEmpty( this ) || this->cursor == this->first ){
@@ -120,7 +118,7 @@ bool DLL_InsertBefore( DLL* this, Item _data )
 		if( n ){
 			done = true;
 
-			n->prev= this->cursor->prev;
+			n->prev = this->cursor->prev;
 			this->cursor->prev->next = n;
 			this->cursor->prev = n;
 			n->next = this->cursor;
@@ -128,8 +126,6 @@ bool DLL_InsertBefore( DLL* this, Item _data )
 		}
 	}
 	return done;
-
-
 }
 
 bool DLL_Remove( DLL* this, ItemPtr _data_back )
@@ -210,41 +206,28 @@ bool DLL_RemoveBack( DLLPtr this, ItemPtr _data_back ){
 }
 
 
-
-
-
-bool DLL_RemoveAfter( DLL* this, ItemPtr _data_back )
-{
+bool DLL_RemoveAfter( DLLPtr this, ItemPtr _data_back ){
     assert( this );
 	bool done = false;
-	
-	if(!DLL_IsEmpty( this ) ){
+
+	if( !DLL_IsEmpty( this ) && this->cursor->next != NULL ){
 		done = true;
-		//solo un elemento, no hay un nodo después para remover
-		//entonces se elimina el mismo
-		if(this->first == this->last){
-			*_data_back = this->first->data;
-			reset(this);
+		*_data_back = this->cursor->next->data;
 
-        }else if(this->cursor == this->last)
-        {
-            done=false;
-            //no se puede hacer la operación si el cursor esta en last
-        
-		}else{
+		NodePtr right = this->cursor->next->next;
+		free( this->cursor->next );
 
-            *_data_back=this->cursor->next->data;
-            NodePtr tmp=this->cursor->next->next;
-            free(this->cursor->next);
-            tmp->prev=this->cursor;
-            this->cursor->next=tmp;
-            --this->len;
+		if( right == NULL ){
+			this->cursor->next = NULL;
+		} else {
+			this->cursor->next = right;
+			right->prev = this->cursor;
+			--this->len;
 		}
-
 	}
 	return done;
-
 }
+
 
 bool DLL_RemoveBefore( DLL* this, ItemPtr _data_back )
 {
@@ -376,5 +359,37 @@ void DLL_Traverse(DLL* this, void (*pfun)(Item) )
 
 	for( NodePtr it = this->last; it != NULL; it = it->prev){
 		pfun( it->data );
+	}
+}
+
+void DLL_Sort_llegada(DLLPtr this){
+	
+	for(size_t i = 0; i < DLL_Len(this) ; i++){
+		DLL_CursorFirst( this );
+
+		for( NodePtr it = this->first; it->next != NULL; it = it->next){
+			if( it->data.hora_llegada < it->next->data.hora_llegada ){
+				Item temporal;
+				DLL_RemoveAfter( this, &temporal);
+				DLL_InsertBefore( this, temporal);
+			}
+			DLL_CursorNext(this);
+		}
+	}
+}
+
+void DLL_Sort_salida(DLLPtr this){
+	
+	for(size_t i = 0; i < DLL_Len(this) ; i++){
+		DLL_CursorFirst( this );
+
+		for( NodePtr it = this->first; it->next != NULL; it = it->next){
+			if( it->data.hora_salida < it->next->data.hora_salida ){
+				Item temporal;
+				DLL_RemoveAfter( this, &temporal);
+				DLL_InsertBefore( this, temporal);
+			}
+			DLL_CursorNext(this);
+		}
 	}
 }

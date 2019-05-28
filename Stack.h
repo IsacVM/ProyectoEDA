@@ -99,7 +99,7 @@ bool Stack_IsFull( StackPtr this );
  */
 size_t Stack_Capacity( StackPtr this );
 
-void salidas_Init( StackPtr this );
-void llegadas_init( StackPtr this );
+void horarios_Init( StackPtr this,StackPtr other );
+
 
 #endif  // _STACK_H_

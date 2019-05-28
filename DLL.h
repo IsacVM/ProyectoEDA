@@ -19,6 +19,17 @@
 #include "Avion.h"
 
 /**
+ * @typedef Item tipo Avion.
+ */
+typedef Avion Item;
+
+/**
+ * @typedef ItemPtr aputador a tipo de dato 'Avion'.
+ */
+typedef Item* ItemPtr;
+
+
+/**
  * @typedef NodeS de tipo estructura autoreferenciada.
  * @struct NodeS referida a un nodo dinamico.
  * @brief Nodo con dato, enlaces anterior y posterior.
@@ -240,5 +251,11 @@ bool   DLL_Search(      DLLPtr this, char* _key );
  * @param this Puntero a DLL, funcion a inyectar
  */
 void   DLL_Traverse(    DLLPtr this, void (*pfun)(Item) );
+
+
+void DLL_Sort_llegada(DLLPtr this);
+
+void DLL_Sort_salida(DLLPtr this);
+
 
 #endif // _DLL_H_

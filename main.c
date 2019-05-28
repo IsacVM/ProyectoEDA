@@ -1,7 +1,7 @@
+#include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
 #include <assert.h>
-#include <stdio.h>
 #include <string.h>
 #include <time.h>
 #include "DLL.h"
@@ -64,6 +64,9 @@ int menu()
     }
 }
 
+bool salir=false;
+
+
 int main(void){
     
     //listas de aviones
@@ -84,17 +87,14 @@ int main(void){
     StackPtr horarios_llegada = Stack_New( 0 );
 
     //llenando pilas de horarios
-    salidas_Init( horarios_salida );
-    llegadas_init( horarios_llegada );
-
+    horarios_Init( horarios_salida,horarios_llegada);
+    
     //aviones dañados
     Item avi1=(Avion){"BoingMX2",0,250,3,0,0};
     Item avi2=(Avion){"Airbus280",0,350,3,0,0};
-    Item otro=(Avion){"Latam290",0,370,3,0,0};
     DLL_InsertFront( danados, avi1);
     DLL_InsertFront( danados, avi2);
-    DLL_InsertFront( danados, otro);
-  
+
     //aviones disponibles
     Item avi4=(Avion){"BoingMZY",0,350,2,0,0};
     Item avi5=(Avion){"Airbus760",0,400,2,0,0};
@@ -104,26 +104,33 @@ int main(void){
     //aviones para aterrizaje
     Item avi7=(Avion){"Aero1",150,300,1,Stack_Pop(horarios_salida),Stack_Pop(horarios_llegada)};
     Item avi8=(Avion){"Aero2",250,320,1,Stack_Pop(horarios_salida),Stack_Pop(horarios_llegada)};
+    Item avi9=(Avion){"Aero3",250,320,1,Stack_Pop(horarios_salida),Stack_Pop(horarios_llegada)};
+    Item avi10=(Avion){"Aero4",250,320,1,Stack_Pop(horarios_salida),Stack_Pop(horarios_llegada)};
+    Item avi11=(Avion){"Aero5",250,320,1,Stack_Pop(horarios_salida),Stack_Pop(horarios_llegada)};
     DLL_InsertFront( entrada, avi7);
     DLL_InsertFront( entrada, avi8);
+    DLL_InsertFront( entrada, avi9);
+    DLL_InsertFront( entrada, avi10);
+    DLL_InsertFront( entrada, avi11);
 
     //aviones para despegue
-    Item avi9=(Avion){"Aero3",100,300,1,Stack_Pop(horarios_salida),Stack_Pop(horarios_llegada)};
-    Item avi10=(Avion){"Aero4",110,200,1,Stack_Pop(horarios_salida),Stack_Pop(horarios_llegada)};
+    Item avi12=(Avion){"Aero6",100,300,1,Stack_Pop(horarios_salida),Stack_Pop(horarios_llegada)};
+    Item avi13=(Avion){"Aero7",110,200,1,Stack_Pop(horarios_salida),Stack_Pop(horarios_llegada)};
     
     //insertar en pista de despegue
-    Pista_Landing(pista2,avi9);
-    Pista_Landing(pista2,avi10);
+    Pista_Landing(pista2,avi12);
+    Pista_Landing(pista2,avi13);
    
    
     printf("\t\tSISTEMA DE ADMINISTRACION AEROPORTUARIA TORRE DE CONTROL\n\n");
 
-    while (1)
+   do
    {  
         switch( menu() ){
-
+ 
             case 0:
                 {
+                    salir=true;
                     //liberando memoria
                     DLL_Delete(danados);
                     DLL_Delete(disponible);
@@ -135,14 +142,23 @@ int main(void){
                     Stack_Delete( horarios_salida );
                     Stack_Delete( horarios_llegada );
                    
-                
                     return 0;
                 }
             case 1:
                 {
-                    printf("\t\tProximos arrivos: \n");
-                    DLL_Traverse(entrada, print);
+                    int input=0;
+                    do{
+                        DLL_Sort_llegada( entrada );
 
+                        printf("\t\tProximos arrivos: \n");
+                        DLL_Traverse(entrada, print);
+
+                        printf("Presiona enter para volver al menu ,otra tecla para actualizar ...");
+                        scanf("%d",&input);
+                        //sleep(1000);//buscar version linux
+
+                    }while(input!=enter);
+           
                     break;
                 }  
             case 2:
@@ -270,7 +286,7 @@ int main(void){
                 }
             case 4:
                 {
-                    
+                    Pista_sort(pista2);
                     printf("\t\tProximos despegues: \n");
                     Pista_Imprimir(pista2);
 
@@ -394,7 +410,6 @@ int main(void){
                                 Avion_Reset(&reparado);
                                 DLL_InsertFront(disponible,reparado);
                                 i++;
-                                printf("Valor de i: %d\n",i);
                                 Avion_Delete(&reparado);
                             }
 
@@ -423,7 +438,7 @@ int main(void){
                 }   
             case 11:
                 {
-                    printf("\t\tFenomeno meteorologico\n");
+                    printf("\t\tFenomeno meteorologico pendiente...\n");
                     break;
                 }     
 
@@ -434,7 +449,7 @@ int main(void){
                    
         }
     
-    }
+    }while(!salir);
 
     return 0;
 }

@@ -13,6 +13,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <assert.h>
+#include <time.h>
 
 /**
  * @typedef ItemI tipo Entero para horarios
@@ -52,7 +53,7 @@ typedef struct SLL{
 } SLL;
 
 /**
- * @typedef DLLPtr Apuntador a Lista DLL.
+ * @typedef SLLPtr Apuntador a Lista SLL.
  */
 typedef SLL* SLLPtr;
 

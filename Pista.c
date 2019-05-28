@@ -102,3 +102,7 @@ void Pista_Peek( PistaPtr this,ItemPtr _avion ){
     
 }
 
+void Pista_sort(PistaPtr this){
+
+		DLL_Sort_salida(this->track);
+}
