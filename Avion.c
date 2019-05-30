@@ -2,6 +2,15 @@
 
 #include "Avion.h"
 
+void Segundos_a_hora(Avion this, int* _hora1, int* _minutos1,int* _hora2, int* _minutos2){
+
+ *_hora1=this.hora_salida/3600;
+ *_minutos1=(this.hora_salida%3600)/60;
+ *_hora2=this.hora_llegada/3600;
+ *_minutos2=(this.hora_llegada%3600)/60;
+
+}
+
 void Avion_Reset(Avion* this){
 
 	 this->pasajeros=0;
@@ -37,4 +46,21 @@ void Avion_ResetHorario(Avion* this, int _hora_salida, int _hora_llegada){
 	this->hora_salida=_hora_salida;
 	this->hora_llegada=_hora_llegada;
 	 
+}
+
+void Avion_archivo(FILE* archivo, Avion this){
+
+		fprintf(archivo,"\n");
+		int h1,h2,m1,m2;
+		Segundos_a_hora(this,&h1,&m1,&h2,&m2);
+		fputs(this._nombre,archivo);
+		fprintf(archivo,"\t\t\t");
+		fprintf(archivo,"%d\t\t\t",this.pasajeros);
+		fprintf(archivo,"%d\t\t\t",this.capacidad);
+		fprintf(archivo,"%02d:%02d\t\t\t",h2,m2);
+		fprintf(archivo,"%02d:%02d\t\t\t",h1,m1);
+
+		fprintf(archivo,"\n");
+
+
 }

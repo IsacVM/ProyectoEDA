@@ -4,10 +4,12 @@
 #include <assert.h>
 #include <string.h>
 #include <time.h>
+
 #include "DLL.h"
 #include "Stack.h"
 #include "Pista.h"
 
+                                                        
 //Funcion privada
 void Segundos_a_horas2(Item this, int* _hora1, int* _minutos1,int* _hora2, int* _minutos2){
 
@@ -69,6 +71,19 @@ bool salir=false;
 
 int main(void){
     
+    //Archivo para serializacion
+    FILE *reporte; 	
+	reporte = fopen("reporte.txt", "w+");
+    // Si no podemos crear el archivo, terminamos el programa.
+    if(reporte== NULL){ 
+        printf("No se pudo crear el archivo... \n"); 
+        return -1; 
+    }else{
+        fprintf(reporte,"\n");
+        fprintf(reporte,"\t\t\t\t\t\tTorre De Control NAICM\n\t\t\t\t\t\tATERRIZAJES\n");
+		fprintf(reporte,"Nombre:\t\tPasajeros:\t\tCapacidad:\t\tHora Llegada:\t\tHora Salida:\n");
+    }
+
     //listas de aviones
     DLL* danados=DLL_New();
     DLL* disponible=DLL_New();
@@ -113,6 +128,8 @@ int main(void){
     DLL_InsertFront( entrada, avi10);
     DLL_InsertFront( entrada, avi11);
 
+    DLL_Sort_llegada( entrada );
+
     //aviones para despegue
     Item avi12=(Avion){"Aero6",100,300,1,Stack_Pop(horarios_salida),Stack_Pop(horarios_llegada)};
     Item avi13=(Avion){"Aero7",110,200,1,Stack_Pop(horarios_salida),Stack_Pop(horarios_llegada)};
@@ -120,7 +137,7 @@ int main(void){
     //insertar en pista de despegue
     Pista_Landing(pista2,avi12);
     Pista_Landing(pista2,avi13);
-   
+
    
     printf("\t\tSISTEMA DE ADMINISTRACION AEROPORTUARIA TORRE DE CONTROL\n\n");
 
@@ -130,7 +147,7 @@ int main(void){
  
             case 0:
                 {
-                    salir=true;
+                 
                     //liberando memoria
                     DLL_Delete(danados);
                     DLL_Delete(disponible);
@@ -141,23 +158,21 @@ int main(void){
                     Pista_Delete(pista2);
                     Stack_Delete( horarios_salida );
                     Stack_Delete( horarios_llegada );
+    
+                    fflush ( reporte );
+                    fclose ( reporte );
+
+                    
+                    salir=true;
                    
                     return 0;
                 }
             case 1:
                 {
-                    int input=0;
-                    do{
-                        DLL_Sort_llegada( entrada );
-
+                   
                         printf("\t\tProximos arrivos: \n");
                         DLL_Traverse(entrada, print);
 
-                        printf("Presiona enter para volver al menu ,otra tecla para actualizar ...");
-                        scanf("%d",&input);
-                        //sleep(1000);//buscar version linux
-
-                    }while(input!=enter);
            
                     break;
                 }  
@@ -207,6 +222,11 @@ int main(void){
                                 //sacamos el avion de solicitudes de entrada
                                 DLL_RemoveBack(sol_entrada,&autorizado);
                                 
+                                //guardamos este avion en el registro de aterrizajes
+
+                                Avion_archivo(reporte,eliminado);
+                            
+
                                 if(Pista_IsEmpty(pista1))
                                 {
 
@@ -232,9 +252,16 @@ int main(void){
                                             }
                                         case 1:
                                             {
+                                                //limpiamos los valores del avion
                                                 Avion_Reset(&autorizado);
+                                                //la sacamos de la pista 1 de aterrizaje
+                                                Item retira;
+                                                Pista_Takeoff(pista1,&retira);
+                                                //se inserta el avion en disponibles
                                                 DLL_InsertFront(disponible,autorizado);
                                                 
+                                                Avion_Delete(&retira);
+
                                                 break;
                                             }
                                         case 2:
@@ -287,6 +314,7 @@ int main(void){
             case 4:
                 {
                     Pista_sort(pista2);
+
                     printf("\t\tProximos despegues: \n");
                     Pista_Imprimir(pista2);
 
@@ -331,6 +359,11 @@ int main(void){
                                 Pista_Takeoff(pista2,&sal1);
                                 DLL_RemoveBack(sol_salida,&sal2);
                             
+                                fprintf(reporte,"\n\t\t\tDESPEGUES\n");
+		                        fprintf(reporte,"Nombre:\t\tPasajeros:\t\tCapacidad:\t\tHora Llegada:\t\tHora Salida:\n");
+
+                                Avion_archivo(reporte,sal1);
+
                                 Avion_Delete(&sal1);
                                 Avion_Delete(&sal2);
                         }

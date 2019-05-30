@@ -63,4 +63,10 @@ void Avion_Delete(Avion* this);
  */
 void Avion_ResetHorario(Avion* this, int _hora_salida, int _hora_llegada);
 
+
+void Avion_archivo(FILE* archivo, Avion this);
+
+
+
+
 #endif // _AVION_H_
