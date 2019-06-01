@@ -1,7 +1,7 @@
 /**
  * @file Pistas.h
  * @Author Team
- * @date mayo 2019
+ * @date 1 junio 2019
  * @brief Proyecto - EDA-I
  * @note Grupo: 0007, Semestre 2019-2
  */
@@ -36,13 +36,13 @@ typedef Pista* PistaPtr;
 PistaPtr Pista_New(	 int _capacidad);
 
 /**
- * @brief Permite insertar un avión a una pista de aterrizaje
+ * @brief Permite insertar un aviÃ³n a una pista de aterrizaje
  * @param apuntador a una 'Pista' y un 'Avion'
  */
 bool Pista_Landing(	 PistaPtr this,Item _avion);
 
 /**
- * @brief Permite extraer un avión de una pista de despegue
+ * @brief Permite extraer un aviÃ³n de una pista de despegue
  * @param apuntador a una 'Pista' y apuntador a un 'Avion'
  */
 bool Pista_Takeoff(	 PistaPtr this,ItemPtr _avion);
@@ -71,7 +71,10 @@ bool Pista_IsEmpty( PistaPtr this );
  */
 void Pista_Peek( PistaPtr this,ItemPtr _avion );
 
-
+/**
+ * @brief Ordena la pista
+ * @param apuntador a una 'Pista'
+ */
 void Pista_sort( PistaPtr this );
 
 #endif // _PISTAS_H_
