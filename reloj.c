@@ -1,5 +1,11 @@
-/******         main.c         ******/
 
+/**
+ * @file Reloj.c
+ * @Author Team
+ * @date 1 junio 2019
+ * @brief Proyecto - EDA-I
+ * @note Grupo: 0007, Semestre 2019-2
+ */
 #include "SLL.h"
 
 #include <string.h>
@@ -67,4 +73,3 @@ getchar();
 */
 
 /** (_horas*3600)+(_minutos*60)+(_segundos) */
-
