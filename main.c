@@ -1,3 +1,11 @@
+/**
+ * @file main.c
+ * @Author Team
+ * @date 1 junio 2019
+ * @brief Proyecto - EDA-I
+ * @note Grupo: 0007, Semestre 2019-2
+ */
+
 #include "DLL.h"
 #include "Pistas.h"
 #include "StackHorarios.h"
@@ -10,6 +18,11 @@
 #define C 76
 
 
+/**
+ * @brief Obtiene una hora 
+ * @param Apuntador de tipo int
+ * @param Apuntador de tipo int	
+ */
 void Obtiene_reloj(int* _hora,int* _minuto){
         time_t t = time(NULL);
         struct tm tm = *localtime(&t);
@@ -17,7 +30,11 @@ void Obtiene_reloj(int* _hora,int* _minuto){
         *_hora=tm.tm_hour;
         *_minuto=tm.tm_min;
 }
-                 
+
+/**
+ * @brief Lee un archivo e interpreta los caracteres 
+ * @param cadena de tipo char 	
+ */                
 void pantalla(char nom[])
 {
     FILE *pant;
@@ -62,7 +79,10 @@ void pantalla(char nom[])
     fclose(pant); 
 }
 
-/**< Solicita arrivo automatico */
+/**
+ * @brief Solicita arrivo automático 
+ * @param Apuntador de tipo void
+ */
 void* notifArrivos(void* arg){
     int* hora_arrivo = (int*) arg;
     int hora_actual = 0;
@@ -78,7 +98,10 @@ void* notifArrivos(void* arg){
     return NULL;
 }
 
-/**< Solicita despegue automatico */
+/**
+ * @brief Solicita despegue automático 
+ * @param Apuntador de tipo void
+ */
 void* notifDespegues(void* arg){
     int* hora_despegue = (int*) arg;
     int hora_actual = 0;
@@ -279,7 +302,7 @@ int main(void){
                     Pista_Delete(pista2);
                     Stack_Delete( horarios_salida );
                     Stack_Delete( horarios_llegada );
-                    /**< Concluir serializacion */
+                    /**< Cierra archivos */
                     fclose ( reporteAt );
                     fclose ( reporteDes ); 
 
@@ -303,7 +326,7 @@ int main(void){
                     Pista_Delete(pista2);
                     Stack_Delete( horarios_salida );
                     Stack_Delete( horarios_llegada );
-                    /**< Concluir serializacion */
+                    /**< Cierra archivos */
                     fclose ( reporteAt );
                     fclose ( reporteDes );
                    
@@ -532,7 +555,7 @@ int main(void){
                 }
             case 8:
                 {
-                    printf("\t\tCARGAR AVIONES \n");
+                    printf("\t\tCARGAR AVION \n");
 
                     if(!DLL_IsEmpty(disponible))
                     {
