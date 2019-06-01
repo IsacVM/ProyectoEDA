@@ -1,5 +1,10 @@
-/******         SLL.c         ******/
-
+/**
+ * @file SLL.c
+ * @Author Team
+ * @date 1 junio 2019
+ * @brief Proyecto - EDA-I
+ * @note Grupo: 0007, Semestre 2019-2
+ */
 #include "SLL.h"
 
 /**
@@ -54,7 +59,7 @@ bool SLL_InsertFront( SLLPtr this, ItemI _data ){
             this->len = 1;
         }
 
-        // lista con nodos, añade nodo en Back
+        // lista con nodos, aÃ±ade nodo en Back
         else{
             node->next = this->first;
             this->first = node;
@@ -72,13 +77,11 @@ bool SLL_InsertBack( SLLPtr this, ItemI _data ){
     if( node ){
         done = true;
 
-        // lista vacia, crea primer nodo
         if( SLL_IsEmpty( this ) ){
             this->first = this->last = node;
             this->len = 1;
         }
 
-        // lista con nodos, añade nodo en Back
         else{
             this->last->next = node;
             this->last = node;
