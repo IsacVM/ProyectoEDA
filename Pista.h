@@ -72,4 +72,8 @@ bool Pista_IsEmpty( PistaPtr this );
  */
 void Pista_Peek( PistaPtr this,ItemPtr _avion );
 
+
+
+void Pista_sort(PistaPtr this);
+
 #endif // _PISTA_H_

@@ -32,17 +32,6 @@ typedef struct
 }Avion;
 
 
-/**
- * @typedef Item tipo Avion.
- */
-typedef Avion Item;
-
-/**
- * @typedef ItemPtr aputador a tipo de dato.
- */
-typedef Item* ItemPtr;
-
-
 /**< tag::API_METODOS[] */
 
 /**
@@ -50,7 +39,7 @@ typedef Item* ItemPtr;
  *  y estado de un avion.
  * @param apuntador a tipo avion.
  */
-void Avion_Reset(ItemPtr this);
+void Avion_Reset(Avion* this);
 
 
 /**
@@ -58,20 +47,26 @@ void Avion_Reset(ItemPtr this);
  *  y estado de un avion.
  * @param apuntador a tipo Avion, valor de: hora_llegada, hora_salida
  */
-void Avion_Llenar(ItemPtr this,int _hora_llegada, int _hora_salida);
+void Avion_Llenar(Avion* this,int _hora_llegada, int _hora_salida);
 
 
 /**
  * @brief Libera memoria utilizada por un avion.
  * @param apuntador a tipo Avion.
  */
-void Avion_Delete(ItemPtr this);
+void Avion_Delete(Avion* this);
 
 
 /**
  * @brief Resetea los valores hora_salida y hora_llegada de un avion.
  * @param apuntador a tipo Avion.
  */
-void Avion_ResetHorario(ItemPtr this, int _hora_salida, int _hora_llegada);
+void Avion_ResetHorario(Avion* this, int _hora_salida, int _hora_llegada);
+
+
+void Avion_archivo(FILE* archivo, Avion this);
+
+
+
 
 #endif // _AVION_H_
