@@ -1,7 +1,7 @@
 /**
  * @file Aviones.h
  * @Author Team
- * @date mayo 2019
+ * @date 1 junio 2019
  * @brief Proyecto - EDA-I
  * @note Grupo: 0007, Semestre 2019-2
  */
@@ -55,7 +55,11 @@ void Avion_Llenar(AvionPtr this,int _hora_llegada, int _hora_salida);
  */
 void Avion_ResetHorario(AvionPtr this, int _hora_salida, int _hora_llegada);
 
-
+/**
+ * @brief Guarda en un archivo los campos del avion
+ * @param apuntador a tip FILE
+ * @param apuntador a tipo Avion.
+ */
 void Avion_archivo(FILE* archivo, Avion this);
 
 #endif // _AVIONES_H_
