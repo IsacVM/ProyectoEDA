@@ -1,7 +1,7 @@
 /**
- * @file Horarios.h
+ * @file StackHorarios.h
  * @Author Team
- * @date mayo 2019
+ * @date 1 junio 2019
  * @brief Proyecto - EDA-I
  * @note Grupo: 0007, Semestre 2019-2
  */
@@ -24,10 +24,12 @@ typedef struct{
     size_t capacity;
 } Stack;
 
+
 /**
  * @typedef StackPtr Puntero a estructura Stack.
  */
 typedef Stack* StackPtr;
+
 
 /**< tag::API_METODOS[] */
 
@@ -38,11 +40,13 @@ typedef Stack* StackPtr;
  */
 StackPtr Stack_New( size_t _capacity );
 
+
 /**
  * @brief Elimina una Pila.
  * @param this apuntador a Pila.
  */
 void Stack_Delete( StackPtr this );
+
 
 /**
  * @brief Inserta en la Pila.
@@ -51,12 +55,14 @@ void Stack_Delete( StackPtr this );
  */
 bool Stack_Push( StackPtr this, ItemI _value );
 
+
 /**
  * @brief Extrae de la Pila.
  * @param this Apuntador a Pila.
  * @return Valor extraido.
  */
 ItemI Stack_Pop( StackPtr this );
+
 
 /**
  * @brief Muestra ultimo valor de la Pila.
@@ -65,12 +71,14 @@ ItemI Stack_Pop( StackPtr this );
  */
 ItemI Stack_Peek( StackPtr this );
 
+
 /**
  * @brief Indica si esta vacia la Pila.
  * @param this Apuntador a Pila.
  * @return True si esta vacia, False si no.
  */
 bool Stack_IsEmpty( StackPtr this );
+
 
 /**
  * @brief Muestra elementos en la Pila.
@@ -88,12 +96,14 @@ void Stack_MakeEmpty( StackPtr this );
 
 /**< end::API_METODOS[] */
 
+
 /**
  * @brief Indica si esta llena la Pila.
  * @param this Apuntador a Pila.
  * @return True si esta llena, False si no.
  */
 bool Stack_IsFull( StackPtr this );
+
 
 /**
  * @brief Muestra capaciad de la Pila.
@@ -102,11 +112,13 @@ bool Stack_IsFull( StackPtr this );
  */
 size_t Stack_Capacity( StackPtr this );
 
+
 /**
  * @brief Obtener la hora actual de la region ( 24 hrs ).
  * @return Hora actual en segundos. (0 a 84600 segundos).
  */
 int Get_hora_actual();
+
 
 /**
  * @brief Inicializa dos Pilas de horarios.
