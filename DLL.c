@@ -39,22 +39,22 @@ static NodePtr newNode( Item _data )
 	return n;
 }
 
-static void reset( DLL* this )
+static void reset( DLLPtr this )
 {
 	this->first = this->last = this->cursor = NULL;
 	this->len = 0;
 }
 
-DLL* DLL_New()
+DLLPtr DLL_New()
 {
-	DLL* list = (DLL*) malloc( sizeof( DLL ) );
+	DLLPtr list = (DLLPtr) malloc( sizeof( DLL ) );
 	if( list ){
 		reset( list );
 	}
 	return list;
 }
 
-void DLL_Delete( DLL* this )
+void DLL_Delete( DLLPtr this )
 {
 	if( this ){
 		DLL_MakeEmpty( this );
@@ -62,7 +62,7 @@ void DLL_Delete( DLL* this )
 	}
 }
 
-bool DLL_InsertBack( DLL* this, Item _data )
+bool DLL_InsertBack( DLLPtr this, Item _data )
 {
 	assert( this );
 	
@@ -85,7 +85,7 @@ bool DLL_InsertBack( DLL* this, Item _data )
 	return done;
 }
 
-bool DLL_InsertFront( DLL* this, Item _data )
+bool DLL_InsertFront( DLLPtr this, Item _data )
 {
 	assert( this );
 	
@@ -108,7 +108,7 @@ bool DLL_InsertFront( DLL* this, Item _data )
 	return done;
 }
 
-bool DLL_InsertAfter( DLL* this, Item _data )
+bool DLL_InsertAfter( DLLPtr this, Item _data )
 {
 	assert( this );
 
@@ -152,7 +152,7 @@ bool DLL_InsertBefore( DLLPtr this, Item _data ){
 	return done;
 }
 
-bool DLL_Remove( DLL* this, ItemPtr _data_back )
+bool DLL_Remove( DLLPtr this, ItemPtr _data_back )
 {
 	assert( this );
 	bool done = false;
@@ -184,7 +184,7 @@ bool DLL_Remove( DLL* this, ItemPtr _data_back )
 	return done;
 }
 
-bool DLL_RemoveFront( DLL* this, ItemPtr _data_back )
+bool DLL_RemoveFront( DLLPtr this, ItemPtr _data_back )
 {
 	assert( this );
 
@@ -253,7 +253,7 @@ bool DLL_RemoveAfter( DLLPtr this, ItemPtr _data_back ){
 }
 
 
-bool DLL_RemoveBefore( DLL* this, ItemPtr _data_back )
+bool DLL_RemoveBefore( DLLPtr this, ItemPtr _data_back )
 {
     assert( this );
 	bool done = false;
@@ -285,19 +285,19 @@ bool DLL_RemoveBefore( DLL* this, ItemPtr _data_back )
 
 }
 
-size_t DLL_Len( DLL* this )
+size_t DLL_Len( DLLPtr this )
 {
 	assert( this );
 	return this->len;
 }
 
-bool DLL_IsEmpty( DLL* this )
+bool DLL_IsEmpty( DLLPtr this )
 {
 	assert( this );
 	return this->first == NULL;
 }
 
-void DLL_MakeEmpty( DLL* this )
+void DLL_MakeEmpty( DLLPtr this )
 {
 	assert( this );
 	while( NULL != this->first){
@@ -308,7 +308,7 @@ void DLL_MakeEmpty( DLL* this )
 	reset( this );
 }
 
-bool DLL_Peek( DLL* this, ItemPtr _data_back )
+bool DLL_Peek( DLLPtr this, ItemPtr _data_back )
 {
    assert(this);
    bool done;
@@ -319,19 +319,19 @@ bool DLL_Peek( DLL* this, ItemPtr _data_back )
    return done;
 }
 
-void DLL_CursorFirst( DLL* this )
+void DLL_CursorFirst( DLLPtr this )
 {
 	assert( this );
 	this->cursor = this->first;
 }
 
-void DLL_CursorLast( DLL* this )
+void DLL_CursorLast( DLLPtr this )
 {
 	assert( this );
 	this->cursor = this->last;
 }
 
-void DLL_CursorNext( DLL* this )
+void DLL_CursorNext( DLLPtr this )
 {
 	assert( this );
 	if( this->cursor != NULL ){
@@ -339,7 +339,7 @@ void DLL_CursorNext( DLL* this )
 	}
 }
 
-void DLL_CursorPrev( DLL* this )
+void DLL_CursorPrev( DLLPtr this )
 {
 	assert( this );
 	if( this->cursor != NULL ){
@@ -347,7 +347,7 @@ void DLL_CursorPrev( DLL* this )
 	}
 }
 
-bool DLL_FindIf( DLL* this, Item _key, bool (*cmp)(Item, Item) )
+bool DLL_FindIf( DLLPtr this, Item _key, bool (*cmp)(Item, Item) )
 {
   assert( this );
   bool found = false;
@@ -361,7 +361,7 @@ bool DLL_FindIf( DLL* this, Item _key, bool (*cmp)(Item, Item) )
 }
 
 
-bool DLL_Search( DLL* this, char* _key )
+bool DLL_Search( DLLPtr this, char* _key )
 {
     assert( this );
 	bool found = false;
@@ -377,7 +377,7 @@ bool DLL_Search( DLL* this, char* _key )
 
 }
 
-void DLL_Traverse(DLL* this, void (*pfun)(Item) )
+void DLL_Traverse(DLLPtr this, void (*pfun)(Item) )
 {
 	assert( this );
 
