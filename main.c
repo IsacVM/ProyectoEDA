@@ -1,39 +1,100 @@
-#include <stdlib.h>
-#include <stdbool.h>
-#include <assert.h>
-#include <stdio.h>
-#include <string.h>
-#include <time.h>
 #include "DLL.h"
-#include "Stack.h"
-#include "Pista.h"
+#include "Pistas.h"
+#include "StackHorarios.h"
 
-//Funcion privada
-void Segundos_a_horas2(Item this, int* _hora1, int* _minutos1,int* _hora2, int* _minutos2){
+#include <time.h>
+#include <ctype.h>
+#include <pthread.h>
 
- *_hora1=this.hora_salida/3600;
- *_minutos1=(this.hora_salida%3600)/60;
- *_hora2=this.hora_llegada/3600;
- *_minutos2=(this.hora_llegada%3600)/60;
+#define R 24
+#define C 76
 
+
+void Obtiene_reloj(int* _hora,int* _minuto){
+        time_t t = time(NULL);
+        struct tm tm = *localtime(&t);
+
+        *_hora=tm.tm_hour;
+        *_minuto=tm.tm_min;
 }
-
-void print( Item item )
+                 
+void pantalla(char nom[])
 {
-  printf("Nombre: %s\n", item._nombre);
-  printf("Pasajeros: %d\n",item.pasajeros);
-  printf("Capacidad: %d\n", item.capacidad);
-  if(item.estado==1)printf("Estado: Ocupado\n");
-  if(item.estado==2)printf("Estado: Disponible\n");
-  if(item.estado==3)printf("Estado: Danado\n");
-  int h1,m1,h2,m2;
-  Segundos_a_horas2(item,&h1,&m1,&h2,&m2);
-  printf("Hora salida: %02d:%02d\n",h1,m1);
-  printf("Hora llegada: %02d:%02d\n",h2,m2);
-  printf("\n\n");
+    FILE *pant;
+    int n,m,carac;
+    char cadcarac[2];
+    char mtr[R][C];
+    pant=fopen("princi.txt","r");
+    for(n=0;n<R;n++)
+     {
+        //Sleep(20);
+        for(m=0;m<C;m++)
+        {
+            mtr[n][m]=fgetc(pant);
+            if(nom)
+            {
+                if (isdigit(mtr[n][m])==0)
+                {
+                    carac=mtr[n][m];
+                    printf("%c",(char)carac);
+                }else{
+                    cadcarac[0]=mtr[n][m];
+                    cadcarac[1]='\0';
+                    carac=atoi(cadcarac);
+                    printf("%c",'o');
+                }
+            }else{
+                if (isdigit(mtr[n][m])==0)
+                {
+                    carac=mtr[n][m];
+                    printf("%c",(char)carac);
+                }else{
+                    cadcarac[0]=mtr[n][m];
+                    cadcarac[1]='\0';
+                    carac=atoi(cadcarac);
+                    printf("%c",'o');
+                } 
+            }
+                                     
+        }
+    }
+
+    fclose(pant); 
 }
 
-//Funcion menu
+/**< Solicita arrivo automatico */
+void* notifArrivos(void* arg){
+    int* hora_arrivo = (int*) arg;
+    int hora_actual = 0;
+
+    while(*hora_arrivo != hora_actual){
+        hora_actual = Get_hora_actual();
+    }
+    printf("\n\t---------------------------\n");
+    printf("\n\t**...AVION ATERRIZANDO...**\n");
+    printf("\n\t---------------------------\n\n");
+    printf("Opcion Menu @: ");
+    sleep(1);
+    return NULL;
+}
+
+/**< Solicita despegue automatico */
+void* notifDespegues(void* arg){
+    int* hora_despegue = (int*) arg;
+    int hora_actual = 0;
+
+    while(*hora_despegue != hora_actual){
+        hora_actual = Get_hora_actual();
+    }
+    printf("\n\t--------------------------\n");
+    printf("\n\t**...AVION DESPEGANDO...**\n");
+    printf("\n\t--------------------------\n");
+    printf("Opcion Menu @: ");
+    sleep(1);
+    return NULL;
+}
+
+/**< Funcion menu */
 int menu()
 {
     while( 1 )
@@ -60,69 +121,155 @@ int menu()
 
         if( 0 <= opcion && opcion <= 11) { 
             return opcion; 
-        }else{ printf( "Opcion no reconocida.\n" ); }
+        }else{ 
+            printf( "Opcion no reconocida.\n" ); 
+        }
     }
 }
 
+/**< ----------------------------------------------------------------- */
 int main(void){
+    system("clear");
     
-    //listas de aviones
+    pantalla("princi.txt");
+    setbuf(stdin,NULL);
+    getchar();  
+
+    /**< variables para el reloj general */
+    int hra,min;
+
+    /**< Archivo Aterrizajes */
+    FILE *reporteAt; 	
+	reporteAt = fopen("reporteAt.txt", "w+"); 
+	
+    if(reporteAt== NULL){ 
+        printf("No se pudo crear el archivo... \n"); 
+        return -1; 
+    }else{
+        fprintf(reporteAt,"\n");
+        fprintf(reporteAt,"\t\t\t\t\tTorre De Control NAICM\n\n\t\t\t\t\t\tATERRIZAJES\n");
+		fprintf(reporteAt,"Nombre:\t\tPasajeros:\t\tCapacidad:\t\tHora Llegada:\t\tHora Salida:\n");
+    }
+
+	/**< Archivo Despegues */
+	FILE *reporteDes; 	
+	reporteDes = fopen("reporteDes.txt", "w+"); 
+	
+    if(reporteDes== NULL){ 
+        printf("No se pudo crear el archivo... \n"); 
+        return -1; 
+    }else{
+        fprintf(reporteDes,"\n");
+        fprintf(reporteDes,"\t\t\t\t\t\t\tTorre De Control NAICM\n\n\t\t\t\t\t\tDESPEGUES\n");
+		fprintf(reporteDes,"Nombre:\t\tPasajeros:\t\tCapacidad:\t\tHora Llegada:\t\tHora Salida:\n");
+    }
+    
+    /**< lista para aviones danados */
     DLL* danados=DLL_New();
+    /**< lista para aviones disponibles */
     DLL* disponible=DLL_New();
-
+    /**< lista de aviones para aterrizaje(estan en el aire) */
     DLL* entrada=DLL_New();
+    /**< lista para solicitudes de aterrizaje */
     DLL* sol_entrada=DLL_New();
-    //pista para aterrizajes
+    /**< pista para aterrizajes basada en una DLL */
     PistaPtr pista1=Pista_New(10);
-
-    //pista para despegues
-    PistaPtr pista2=Pista_New(10);
+    /**< lista para solicitudes de despegue */
     DLL* sol_salida=DLL_New();
-
-    //pilas de horarios
+    /**< pista para despegues basada en una DLL */
+    PistaPtr pista2=Pista_New(10);
+    /**< pila de horarios de salida */
     StackPtr horarios_salida = Stack_New( 0 );
+    /**< pila de horarios de llegada */
     StackPtr horarios_llegada = Stack_New( 0 );
+    /**< llenanado de pilas de horarios */
+    horarios_Init( horarios_salida,horarios_llegada);
 
-    //llenando pilas de horarios
-    salidas_Init( horarios_salida );
-    llegadas_init( horarios_llegada );
-
-    //aviones dañados
+    /**< creacion de algunos aviones danados */
     Item avi1=(Avion){"BoingMX2",0,250,3,0,0};
     Item avi2=(Avion){"Airbus280",0,350,3,0,0};
     DLL_InsertFront( danados, avi1);
     DLL_InsertFront( danados, avi2);
-  
-    //aviones disponibles
+
+    /**< creacion de algunos disponibles */
     Item avi4=(Avion){"BoingMZY",0,350,2,0,0};
     Item avi5=(Avion){"Airbus760",0,400,2,0,0};
     DLL_InsertFront( disponible, avi4);
     DLL_InsertFront( disponible, avi5);
   
-    //aviones para aterrizaje
-    Item avi7=(Avion){"Aero1",150,300,1,Stack_Pop(horarios_salida),Stack_Pop(horarios_llegada)};
-    Item avi8=(Avion){"Aero2",250,320,1,Stack_Pop(horarios_salida),Stack_Pop(horarios_llegada)};
+    /**< creacion de algunos aviones para aterrizaje */
+    int dif = 7200; /**< Dos horas de diferencia con respecto a los despegues */
+    Item avi6=(Avion){"Aero1",150,300,1,Stack_Pop(horarios_salida)-dif,Stack_Pop(horarios_llegada)-dif};
+    Item avi7=(Avion){"Aero2",220,320,1,Stack_Pop(horarios_salida)-dif,Stack_Pop(horarios_llegada)-dif};
+    Item avi8=(Avion){"Aero3",260,350,1,Stack_Pop(horarios_salida)-dif,Stack_Pop(horarios_llegada)-dif};
+    Item avi9=(Avion){"Aero4",250,380,1,Stack_Pop(horarios_salida)-dif,Stack_Pop(horarios_llegada)-dif};
+    Item avi10=(Avion){"Aero5",350,420,1,Stack_Pop(horarios_salida)-dif,Stack_Pop(horarios_llegada)-dif};
+    DLL_InsertFront( entrada, avi6);
     DLL_InsertFront( entrada, avi7);
     DLL_InsertFront( entrada, avi8);
+    DLL_InsertFront( entrada, avi9);
+    DLL_InsertFront( entrada, avi10);
 
-    //aviones para despegue
-    Item avi9=(Avion){"Aero3",100,300,1,Stack_Pop(horarios_salida),Stack_Pop(horarios_llegada)};
-    Item avi10=(Avion){"Aero4",110,200,1,Stack_Pop(horarios_salida),Stack_Pop(horarios_llegada)};
+    /**< ordenar arrivos y despegues de pista 2 */
+    DLL_Sort(entrada);
+    Pista_sort(pista2);
+
+    /**< creacion de algunos aviones para despegue */
+    Item avi11=(Avion){"Aero6",100,300,1,Stack_Pop(horarios_salida),Stack_Pop(horarios_llegada)};
+    Item avi12=(Avion){"Aero7",110,200,1,Stack_Pop(horarios_salida),Stack_Pop(horarios_llegada)};
     
-    //insertar en pista de despegue
-    Pista_Landing(pista2,avi9);
-    Pista_Landing(pista2,avi10);
-   
-   
-    printf("\t\tSISTEMA DE ADMINISTRACION AEROPORTUARIA TORRE DE CONTROL\n\n");
+    /**< insertando aviones para despegue en pista2 de despegue */
+    Pista_Landing(pista2,avi11);
+    Pista_Landing(pista2,avi12);
+
+    /**< Definiendo los dos hilos (prcesos) */
+    pthread_t proceso1;
+    pthread_t proceso2;
 
     while (1)
-   {  
-        switch( menu() ){
+    {  
+        system("clear");
+        system("clear");
 
-            case 0:
-                {
-                    //liberando memoria
+        /**< Notifica sobre el proximo arrivo (proceso 1) */
+        if( !DLL_IsEmpty( entrada ) ){
+            Item prox_arrivo;
+            DLL_CursorLast( entrada );
+            DLL_Peek( entrada, &prox_arrivo );
+            int arrivo_temp = prox_arrivo.hora_llegada;
+            pthread_create(&proceso1, NULL, notifArrivos, &arrivo_temp );
+        }
+
+        /**< Notifica sobre el proximo despegue (proceso 2) */
+        if( !DLL_IsEmpty( pista2->track ) ){
+            Item prox_despegue;
+            DLL_CursorLast( pista2->track );
+            DLL_Peek( pista2->track, &prox_despegue );
+            int despegue_temp = prox_despegue.hora_salida;
+
+            pthread_create(&proceso2, NULL, notifDespegues, &despegue_temp );
+        }
+
+        printf("\t\tSISTEMA DE ADMINISTRACION AEROPORTUARIA TORRE DE CONTROL\n\n");
+        
+        Obtiene_reloj(&hra,&min);
+
+        printf("\nHora de inicio: %02d:%02d\n",hra,min );
+
+        /**< CASO Particular de Fenomeno Meteorologico */
+     	static int stop = 1;
+     	if ( stop == 0 )
+     	{
+     	 	printf ("\nDeseas reanudar las actividades del aeropuerto?\nSI -> 1      N0-> 0 \n"); 
+     	 	int option; 
+     	 	scanf ("%d",&option );
+     	 	if (option == 1)
+     	 	{
+     	 	    stop = 1; 
+     	 	    printf ("\nActividades reanudadas\n"); 
+     	    }else{
+     	 		    printf ("\nCerrando sesion\nGenerando archivo de reporte\n");
+     	 		    /**< liberando memoria dinamica */
                     DLL_Delete(danados);
                     DLL_Delete(disponible);
                     DLL_Delete(entrada);
@@ -132,20 +279,50 @@ int main(void){
                     Pista_Delete(pista2);
                     Stack_Delete( horarios_salida );
                     Stack_Delete( horarios_llegada );
+                    /**< Concluir serializacion */
+                    fclose ( reporteAt );
+                    fclose ( reporteDes ); 
+
+                    return 0;    
+     	 	}
+     	}
+
+        /**< OPCIONES DE MENU */
+        switch( menu() ){
+ 
+            case 0:
+                {
+                 
+                    /**< liberando memoria dinamica */
+                    DLL_Delete(danados);
+                    DLL_Delete(disponible);
+                    DLL_Delete(entrada);
+                    DLL_Delete(sol_entrada);
+                    Pista_Delete(pista1);
+                    DLL_Delete(sol_salida);
+                    Pista_Delete(pista2);
+                    Stack_Delete( horarios_salida );
+                    Stack_Delete( horarios_llegada );
+                    /**< Concluir serializacion */
+                    fclose ( reporteAt );
+                    fclose ( reporteDes );
                    
-                
                     return 0;
                 }
             case 1:
                 {
-                    printf("\t\tProximos arrivos: \n");
+                   
+                    printf("\t\tAVIONES PARA ATERRIZAJE\n");
                     DLL_Traverse(entrada, print);
+                    printf ("Presione Enter para regresar al menu principal\n"); 
+                    setbuf(stdin, NULL);
+                    getchar();  
 
                     break;
                 }  
             case 2:
                 {
-                    printf("\t\tSolicitar aterrizaje: \n");
+                    printf("\t\tSOLICITAR ATERRIZAJE \n");
 
                     if(!DLL_IsEmpty(entrada)){
 
@@ -155,23 +332,26 @@ int main(void){
                         print(enter);
 
                         int otc;
-                        printf("Solicitar aterrizaje(Si=1): ");
+                        printf("Solicitar aterrizaje(Si= 1): ");
                         scanf("%d",&otc);
                         if(otc==1){
                             DLL_InsertFront(sol_entrada,enter);
+                            printf ("\nSolicitud realizada!\n"); 
                         }
-                        //liberamos memoria
-                        Avion_Delete(&enter);
+                        
                         
                     }else{
                         printf("Lista vacia");
-                    }    
-
-                    break;
+                    }  
+                    printf ("Presione Enter para regresar al menu principal\n"); 
+                    setbuf(stdin, NULL);
+                    getchar(); 
+					  
+                    break; 
                 }
             case 3:
                 {
-                    printf("\t\tAutorizar aterrizaje: \n");
+                    printf("\t\tAUTORIZAR ATERRIZAJE \n");
 
                     if(!DLL_IsEmpty(sol_entrada)){
 
@@ -181,14 +361,15 @@ int main(void){
                         scanf("%d",&otc2);
                         if(otc2==1)
                         {
-                               
                                 Item eliminado;
                                 Item autorizado;
-                                //sacamos el avion de la lista de entrada
+                                /**< sacamos el avion de la lista de entrada */
                                 DLL_RemoveBack(entrada,&eliminado);
-                                //sacamos el avion de solicitudes de entrada
+                                /**< sacamos el avion de solicitudes de entrada */
                                 DLL_RemoveBack(sol_entrada,&autorizado);
-                                
+                                /**< guardamos este avion en el registro de aterrizajes */
+                                Avion_archivo(reporteAt,eliminado);
+
                                 if(Pista_IsEmpty(pista1))
                                 {
 
@@ -214,9 +395,15 @@ int main(void){
                                             }
                                         case 1:
                                             {
+                                                /**< limpiamos los valores del avion */
                                                 Avion_Reset(&autorizado);
+                                                /**< la sacamos de la pista 1 de aterrizaje */
+                                                Item retira;
+                                                Pista_Takeoff(pista1,&retira);
+                                                /**< se inserta el avion en disponibles */
                                                 DLL_InsertFront(disponible,autorizado);
-                                                
+            
+                                                printf ("\nRealizado con exito!\n");
                                                 break;
                                             }
                                         case 2:
@@ -228,9 +415,7 @@ int main(void){
                                                 Avion_ResetHorario(&avion,Stack_Pop(horarios_salida),Stack_Pop(horarios_llegada)); 
                                                 //se pone en la lista de espera de despegue
                                                 Pista_Landing(pista2,avion);
-
-                                                //liberamos memoria
-                                                Avion_Delete(&avion);
+                                                printf ("\nAvion listo en pista 2\n"); 
 
                                                 break;
                                             }
@@ -243,40 +428,44 @@ int main(void){
                                 }else{
 
                                     printf("\t\t\tCHOQUE DE AVIONES!!\n");
-                                    Item chocado;
-                                    Pista_Takeoff(pista1,&chocado);
-                                    printf("\n\t\tMandando avion '%s' y '%s' a lista de aviones danados...\n",autorizado._nombre,chocado._nombre);
-                                    Avion_Reset(&autorizado);
-                                    Avion_Reset(&chocado);
-                                    DLL_InsertFront(danados,autorizado);
-                                    DLL_InsertFront(danados,chocado);
-
-                                    Avion_Delete(&chocado);
-
+                                    Item chocado1,chocado2;
+                                    Pista_Takeoff(pista1,&chocado1);
+                                    Pista_Takeoff(pista1,&chocado2);
+                                    printf("\n\t\tMandando avion '%s' y '%s' a lista de aviones danados...\n",chocado1._nombre,chocado2._nombre);
+                                    Avion_Reset(&chocado1);
+                                    Avion_Reset(&chocado2);
+                                    DLL_InsertFront(danados,chocado1);
+                                    DLL_InsertFront(danados,chocado2);
                                 }    
-
-                                //liberamos memoria
-                                Avion_Delete(&eliminado);
-                                Avion_Delete(&autorizado);
                         }
 
                     }else{
-                        printf("Lista vacia");
+                        printf("\nNo hay solicitudes de aterrizaje\n");
                     }    
                     
-                    break;
+                    printf ("Presione Enter para regresar al menu principal\n"); 
+                    setbuf(stdin, NULL);
+                    getchar(); 
+                    break;    
+
                 }
             case 4:
                 {
-                    
-                    printf("\t\tProximos despegues: \n");
+                    Pista_sort(pista2);
+
+                    printf("\t\tPROXIMOS DESPEGUES\n");
                     Pista_Imprimir(pista2);
+                    
+                    printf ("Presione Enter para regresar al menu principal\n"); 
+                    setbuf(stdin, NULL);
+                    getchar();
 
                     break; 
                 }   
             case 5:
                 { 
-                    printf("\t\tSolicitar despegue: \n");
+                    printf("\t\tSOLICITAR DESPEGUE\n");
+                    
                     if(!Pista_IsEmpty(pista2)){
                     
                         Item salir;
@@ -289,17 +478,21 @@ int main(void){
                         if(o==1){
                             DLL_InsertFront(sol_salida,salir);
                         }
-                        //liberamos memoria
-                        Avion_Delete(&salir);
+                       
+                        printf ("\nRealizado con exito!\n");
                     }else{
-                        printf("Lista vacia");
+                        printf("\nNo hay solicitudes de despegue\n");
                     }
+                    
+                    printf ("Presione Enter para regresar al menu principal\n"); 
+                    setbuf(stdin, NULL);
+                    getchar();
                     
                     break;
                 }   
             case 6:
                 {
-                    printf("\t\tAutorizar despegue: \n");
+                    printf("\t\tAUTORIZAR DESPEGUE\n");
 
                     if(!DLL_IsEmpty(sol_salida)){
 
@@ -307,33 +500,39 @@ int main(void){
                         int t;
                         printf("Aceptar solicitud de despegue(Si=1): ");
                         scanf("%d",&t);
-                        if(t==1)
+                        if( t == 1 )
                         {
                                 Item sal1,sal2;
                                 Pista_Takeoff(pista2,&sal1);
                                 DLL_RemoveBack(sol_salida,&sal2);
-                            
-                                Avion_Delete(&sal1);
-                                Avion_Delete(&sal2);
+                        
+                                Avion_archivo(reporteDes,sal1);
+                                printf ("\nRealizado con exito!\n");
                         }
 
                     }else{
-                        printf("Lista vacia");
+                        printf("\nNo hay ninguna solicitud de salida\n");
                     }
+                    printf ("Presione Enter para regresar al menu principal\n"); 
+                    setbuf(stdin, NULL);
+                    getchar();
                     
-                    break;
-                   
+                    break;   
                 }       
             case 7:
                 { 
-                    printf("\t\tAviones disponibles: \n");
-                    DLL_Traverse( disponible, print);   
+                    printf("\t\tAVIONES DISPONIBLES \n");
+                    DLL_Traverse( disponible, print); 
+                    
+					printf ("Presione Enter para regresar al menu principal\n"); 
+                    setbuf(stdin, NULL);
+                    getchar ( );  
 
                     break;
                 }
             case 8:
                 {
-                    printf("\t\tCargar aviones: \n");
+                    printf("\t\tCARGAR AVIONES \n");
 
                     if(!DLL_IsEmpty(disponible))
                     {
@@ -350,28 +549,34 @@ int main(void){
                             Avion_Llenar(&temp,Stack_Pop(horarios_llegada),Stack_Pop(horarios_salida));
                             //llevamos el avion a la pista de despegue
                             Pista_Landing(pista2,temp);
-
-                            Avion_Delete(&temp);
+                            printf ("\nAvion cargado con exito!\n"); 
+                        }else{
+                            printf("\nAvion NO cargado\n");
                         }
 
                     }else{
-                        printf("Lista vacia");
+                        printf("No hay aviones disponibles");
                     }
                     
-                    break; 
+                    printf ("Presione Enter para regresar al menu principal\n"); 
+                    setbuf(stdin, NULL);
+                    getchar();
                     
+                    break;        
                 }
-
             case 9:
                 {
-                    printf("\t\tAviones danados: \n");
+                    printf("\t\tAVIONES DANADOS\n");
                     DLL_Traverse( danados, print);
-                    
+                    printf ("Presione Enter para regresar al menu principal\n"); 
+                    setbuf(stdin, NULL);
+                    getchar();
+
                     break;
                 } 
             case 10:
                 {
-                    printf("\t\tReparar aviones: \n");
+                    printf("\t\tREPARAR AVIONES \n");
 
                     if(!DLL_IsEmpty(danados))
                     {
@@ -385,13 +590,13 @@ int main(void){
                         {
                             printf("\n\tReparando todos...\n");
                             int i=0;
-                            while(i<=DLL_Len(danados)){
+                            int tama=DLL_Len(danados);
+                            while(i<tama){
                                 Item reparado;
                                 DLL_RemoveBack(danados,&reparado);
                                 Avion_Reset(&reparado);
                                 DLL_InsertFront(disponible,reparado);
                                 i++;
-                                Avion_Delete(&reparado);
                             }
 
                         }else if(oci==2){
@@ -407,27 +612,39 @@ int main(void){
                                 DLL_Remove(danados,&reparar);
                                 Avion_Reset(&reparar);
                                 DLL_InsertFront(disponible,reparar);
-                                Avion_Delete(&reparar); 
                             }
-                            
-
                         }
 
                     }
-
-                    break;
+					printf ("Presione Enter para regresar al menu principal\n"); 
+                    setbuf(stdin, NULL);
+                    getchar();
+                    break;  
                 }   
             case 11:
                 {
-                    printf("\t\tFenomeno meteorologico\n");
+                    printf("\n\t\tFENOMENO METEREOLOGICO\n");
+                    printf ("\nDetener todas las actividades -> 1\nRegresar al menu principal -> 0\n"); 
+					int choice; 
+					scanf ("%d", &choice );  
+                    if (choice == 1)
+                    {
+                    	stop = 0; 
+                    	printf ("\nDeteniendo todas las actividades\n"); 
+                    	printf ("Presione Enter para regresar al menu principal\n"); 
+                   		setbuf(stdin, NULL);
+                    	getchar();
+                    }
+                    else{
+                    	break; 
+                    }
+                    
                     break;
                 }     
 
             default:
-                
                     printf( "Opcion no reconocida\n" );
                     break;
-                   
         }
     
     }

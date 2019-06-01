@@ -1,3 +1,1 @@
-Intrucción de compilación hasta el momento:
-
-gcc -Wall -std=c99 -o vamos.out main.c Pista.c Stack.c DLL.c SLL.c
+gcc -Wall -std=c99 -o play.out main.c Aviones.c Pistas.c StackHorarios.c DLL.c SLL.c -pthread

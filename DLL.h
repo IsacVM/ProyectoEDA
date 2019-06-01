@@ -9,14 +9,20 @@
 #ifndef _DLL_H_
 #define _DLL_H_
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdbool.h>
-#include <assert.h>
-#include <string.h>
-#include <time.h>
+#include "Aviones.h"
 
-#include "Avion.h"
+#include <string.h>
+#include <unistd.h>
+
+/**
+ * @typedef Item tipo Avion.
+ */
+typedef Avion Item;
+
+/**
+ * @typedef ItemPtr aputador a tipo de dato 'Avion'.
+ */
+typedef Item* ItemPtr;
 
 /**
  * @typedef NodeS de tipo estructura autoreferenciada.
@@ -50,6 +56,13 @@ typedef struct DLL
 } DLL;
 
 typedef DLL* DLLPtr;
+
+void Segundos_a_horas(Item this, int* _h1, int* _m1,int* _h2, int* _m2);
+
+
+
+
+void print( Item item );
 
 /**
  * @brief Crea una DLL.
@@ -232,13 +245,16 @@ bool DLL_FindIf( DLLPtr this, Item _key, bool (*cmp)(Item s0, Item s1) );
  * @return True si encontro, False si no.
  * @post Coloca al cursor en el nodo donde encontro el valor. 
  */
-bool   DLL_Search(      DLLPtr this, char* _key );
+bool   DLL_Search( DLLPtr this, char* _key );
 
 
 /**
  * @brief Realiza una funcion inyectada. En este caso: Imprimir.
  * @param this Puntero a DLL, funcion a inyectar
  */
-void   DLL_Traverse(    DLLPtr this, void (*pfun)(Item) );
+void   DLL_Traverse( DLLPtr this, void (*pfun)(Item) );
+
+void DLL_Sort( DLLPtr other );
+
 
 #endif // _DLL_H_

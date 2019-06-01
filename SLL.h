@@ -13,16 +13,20 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <assert.h>
+#include <time.h>
+
 
 /**
  * @typedef ItemI tipo Entero para horarios
  */
 typedef int ItemI;
 
+
 /**
  * @typedef ItemIPtr Apuntador a tipo de dato.
  */
 typedef ItemI* ItemIPtr;
+
 
 /**
  * @typedef NodeS de tipo estructura autoreferenciada.
@@ -34,10 +38,12 @@ typedef struct NodeS{
     struct NodeS* next;
 } NodeS;
 
+
 /**
  * @typedef NodeSPtrS Apuntador a nodo.
  */
 typedef NodeS* NodeSPtrS;
+
 
 /**
  * @typedef SLL de tipo estructura.
@@ -51,10 +57,12 @@ typedef struct SLL{
     size_t len;
 } SLL;
 
+
 /**
- * @typedef DLLPtr Apuntador a Lista DLL.
+ * @typedef SLLPtr Apuntador a Lista SLL.
  */
 typedef SLL* SLLPtr;
+
 
 /**
  * @brief Crea una SLL.
@@ -62,12 +70,12 @@ typedef SLL* SLLPtr;
  */
 SLLPtr SLL_New( );
 
+
 /**
  * @brief Borra una SLL.
  * @param this Puntero a SLL.
  */
 void SLL_Delete( SLLPtr this );
-
 
 
 /**
@@ -78,8 +86,6 @@ void SLL_Delete( SLLPtr this );
 bool SLL_InsertFront( SLLPtr this, ItemI _data );
 
 
-
-
 /**
  * @brief Inserta en el Back.
  * @param this Puntero a SLL, _data valor a insertar.
@@ -87,13 +93,13 @@ bool SLL_InsertFront( SLLPtr this, ItemI _data );
  */
 bool SLL_InsertBack( SLLPtr this, ItemI _data );
 
+
 /**
  * @brief Inserta delante del cursor.
  * @param this Puntero a SLL, _data valor a insertar.
  * @return True si inserto, False si no.
  */
 bool SLL_InsertAfter( SLLPtr this, ItemI _data );
-
 
 
 /**
@@ -104,14 +110,12 @@ bool SLL_InsertAfter( SLLPtr this, ItemI _data );
 bool SLL_RemoveFront( SLLPtr this, ItemIPtr _data_back );
 
 
-
 /**
  * @brief Muestra el valor al que apunta el cursor.
  * @param this Puntero a SLL, _data_back el valor a mostrar.
  * @return True si muestra valor, False si no.
  */
 bool SLL_Peek( SLLPtr this, ItemIPtr _data_back );
-
 
 
 /**
@@ -122,14 +126,12 @@ bool SLL_Peek( SLLPtr this, ItemIPtr _data_back );
 size_t SLL_Len( SLLPtr this );
 
 
-
 /**
  * @brief Indica si esta vacia la SLL.
  * @param this Puntero a SLL.
  * @return True si esta vacia, False si no.
  */
 bool SLL_IsEmpty( SLLPtr this );
-
 
 
 /**
@@ -139,14 +141,11 @@ bool SLL_IsEmpty( SLLPtr this );
 void SLL_MakeEmpty( SLLPtr this );
 
 
-
 /**
  * @brief Mueve el cursor a first.
  * @param this Puntero a SLL.
  */
 void SLL_CursorFirst( SLLPtr this );
-
-
 
 
 /**
@@ -156,14 +155,12 @@ void SLL_CursorFirst( SLLPtr this );
 void SLL_CursorLast( SLLPtr this );
 
 
-
 /**
  * @brief Mueve el cursor al siguiente nodo.
  * @pre cursor debe estar posicionado en algun nodo.
  * @param this Puntero a SLL.
  */
 void SLL_CursorNext( SLLPtr this );
-
 
 
 /**

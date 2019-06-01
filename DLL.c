@@ -1,8 +1,32 @@
 /******         DLL.c         ******/
 
-
 #include "DLL.h"
-#include "Avion.c"
+
+// corregir el 2 en el nombre de la funcion
+void Segundos_a_horas(Item this, int* _h1, int* _m1,int* _h2, int* _m2){
+
+    *_h1=this.hora_salida/3600;
+    *_m1=(this.hora_salida%3600)/60;
+    *_h2=this.hora_llegada/3600;
+    *_m2=(this.hora_llegada%3600)/60;
+
+}
+
+void print( Item item )
+{
+    printf("Avion: %s\n", item._nombre);
+    printf("Pasajeros: %d\n",item.pasajeros);
+    printf("Capacidad: %d\n", item.capacidad);
+    if(item.estado==1)printf("Estado: Ocupado\n");
+    if(item.estado==2)printf("Estado: Disponible\n");
+    if(item.estado==3)printf("Estado: Danado\n");
+    int h1,m1,h2,m2;
+    Segundos_a_horas(item,&h1,&m1,&h2,&m2);
+    printf("Hora salida: %02d:%02d\n",h1,m1);
+    printf("Hora llegada: %02d:%02d\n",h2,m2);
+    printf("\n\n");
+    sleep(1);
+}
 
 static NodePtr newNode( Item _data )
 {
@@ -107,10 +131,8 @@ bool DLL_InsertAfter( DLL* this, Item _data )
 	return done;
 }
 
-bool DLL_InsertBefore( DLL* this, Item _data )
-{
+bool DLL_InsertBefore( DLLPtr this, Item _data ){
     assert( this );
-
 	bool done = false;
 
 	if( DLL_IsEmpty( this ) || this->cursor == this->first ){
@@ -120,7 +142,7 @@ bool DLL_InsertBefore( DLL* this, Item _data )
 		if( n ){
 			done = true;
 
-			n->prev= this->cursor->prev;
+			n->prev = this->cursor->prev;
 			this->cursor->prev->next = n;
 			this->cursor->prev = n;
 			n->next = this->cursor;
@@ -128,8 +150,6 @@ bool DLL_InsertBefore( DLL* this, Item _data )
 		}
 	}
 	return done;
-
-
 }
 
 bool DLL_Remove( DLL* this, ItemPtr _data_back )
@@ -187,61 +207,51 @@ bool DLL_RemoveFront( DLL* this, ItemPtr _data_back )
 	return done;
 }
 
-bool DLL_RemoveBack( DLL* this, ItemPtr _data_back )
-{
+bool DLL_RemoveBack( DLLPtr this, ItemPtr _data_back ){
     assert( this );
 	bool done = false;
 
-	if(!DLL_IsEmpty( this ) ){
-		done = true;
-		//solo un elemento
-		if(this->first == this->last){
-			*_data_back = this->first->data;
-			reset(this);
-		}else{
+	if( !DLL_IsEmpty( this ) ){
+	    done = true;
+		*_data_back = this->last->data;
 
-			*_data_back = this->last->data;
-			NodePtr tmp = this->last->prev;
-			free(this->last);
-			this->last=tmp;	
-            --this->len;	
+		NodePtr tmp = this->last->prev;
+		free( this->last );
+		this->last = tmp;
+
+		if( this->last != NULL ){
+			this->last->next = NULL;
+			--this->len;
+		} else {
+			reset( this );
 		}
 	}
 	return done;
 }
 
-bool DLL_RemoveAfter( DLL* this, ItemPtr _data_back )
-{
+
+bool DLL_RemoveAfter( DLLPtr this, ItemPtr _data_back ){
     assert( this );
 	bool done = false;
-	
-	if(!DLL_IsEmpty( this ) ){
+
+	if( !DLL_IsEmpty( this ) && this->cursor->next != NULL ){
 		done = true;
-		//solo un elemento, no hay un nodo después para remover
-		//entonces se elimina el mismo
-		if(this->first == this->last){
-			*_data_back = this->first->data;
-			reset(this);
+		*_data_back = this->cursor->next->data;
 
-        }else if(this->cursor == this->last)
-        {
-            done=false;
-            //no se puede hacer la operación si el cursor esta en last
-        
-		}else{
+		NodePtr right = this->cursor->next->next;
+		free( this->cursor->next );
 
-            *_data_back=this->cursor->next->data;
-            NodePtr tmp=this->cursor->next->next;
-            free(this->cursor->next);
-            tmp->prev=this->cursor;
-            this->cursor->next=tmp;
-            --this->len;
+		if( right == NULL ){
+			this->cursor->next = NULL;
+		} else {
+			this->cursor->next = right;
+			right->prev = this->cursor;
+			--this->len;
 		}
-
 	}
 	return done;
-
 }
+
 
 bool DLL_RemoveBefore( DLL* this, ItemPtr _data_back )
 {
@@ -353,7 +363,7 @@ bool DLL_FindIf( DLL* this, Item _key, bool (*cmp)(Item, Item) )
 
 bool DLL_Search( DLL* this, char* _key )
 {
-   assert( this );
+    assert( this );
 	bool found = false;
 
 	for( NodePtr it = this->first; it != NULL; it = it->next ){
@@ -374,4 +384,54 @@ void DLL_Traverse(DLL* this, void (*pfun)(Item) )
 	for( NodePtr it = this->last; it != NULL; it = it->prev){
 		pfun( it->data );
 	}
+}
+
+static void quicksort( ItemPtr arreglo, int lim_izq, int lim_der ){
+    int izq = lim_izq, der = lim_der;
+    int pivote = arreglo[(izq+der)/2].hora_llegada;
+    Item temporal;
+
+    do{
+        while(arreglo[izq].hora_llegada<pivote && izq<lim_der){
+            izq++;
+        }
+        while(pivote<arreglo[der].hora_llegada && der>lim_izq){
+            der--;
+        }
+        if(izq <= der){
+            temporal = arreglo[izq];
+            arreglo[izq] = arreglo[der];
+            arreglo[der]=temporal;
+            izq++;
+            der--;
+        }
+    }while(izq <= der);
+
+    if( lim_izq < der ){
+        quicksort(arreglo, lim_izq, der);
+    }
+    if( lim_der > izq ){
+        quicksort(arreglo, izq, lim_der);
+    }
+
+}
+
+void DLL_Sort(DLLPtr other){
+    int tamanio = DLL_Len(other);
+    ItemPtr arreglo_aux = (ItemPtr)malloc( tamanio * sizeof(Item));
+    
+    for( size_t i = 0 ; i < tamanio ; ++i ){
+        Item temporal;
+        DLL_RemoveFront( other, &temporal);
+        arreglo_aux[i] = temporal;
+    }
+
+    quicksort(arreglo_aux, 0, tamanio-1 );
+
+    for( size_t j = 0 ; j < tamanio ; ++j ){
+        Item tmp = arreglo_aux[j];
+        DLL_InsertFront( other, tmp);
+    }
+
+	free(arreglo_aux);
 }

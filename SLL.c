@@ -163,12 +163,12 @@ void SLL_CursorFirst( SLLPtr this ){
     this->cursor = this->first;
 }
 
-void SLL_CursorLast( SLL* this ){
+void SLL_CursorLast( SLLPtr this ){
     assert( this );
     this->cursor = this->last;
 }
 
-void SLL_CursorNext( SLL* this ){
+void SLL_CursorNext( SLLPtr this ){
     assert( this->cursor );
 
     if( this->cursor == this->last ){
