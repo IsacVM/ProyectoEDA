@@ -1,5 +1,10 @@
-/******         Stack.c         ******/
-
+/**
+ * @file StackHorarios.c
+ * @Author Team
+ * @date 1 junio 2019
+ * @brief Proyecto - EDA-I
+ * @note Grupo: 0007, Semestre 2019-2
+ */
 #include "StackHorarios.h"
 
 StackPtr Stack_New( size_t _capacity ){
