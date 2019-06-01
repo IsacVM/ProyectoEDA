@@ -1,8 +1,16 @@
-/***------AVIONES--------***/
-
+/**
+ * @file Aviones
+ * @Author Team
+ * @date 1 junio 2019
+ * @brief Proyecto - EDA-I
+ * @note Grupo: 0007, Semestre 2019-2
+ */
+ 
 #include "Aviones.h"
 
-/**< Funcion privada para cambiar el formato de hora en segundos hora hh:mm */
+/**
+ * @fn Convierte segundos al formato hh:mm:ss
+ */
 static void Segundos_a_hora(Avion this, int* _hora1, int* _minutos1,int* _hora2, int* _minutos2){
 
  *_hora1 = this.hora_salida/3600;
