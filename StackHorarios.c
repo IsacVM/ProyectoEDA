@@ -69,31 +69,18 @@ void Stack_MakeEmpty( StackPtr this ){
 }
 
 int Get_hora_actual(){
-    #if 0
+   
     time_t tiempo;
     struct tm *info;
     time(&tiempo);
     info = gmtime(&tiempo); /**< Obtiene GMTime */
-    #endif
-
-    time_t t = time(NULL);
-    struct tm tm = *localtime(&t);
-
-    int _hora=tm.tm_hour;
-    int _minuto=tm.tm_min;
-    int _segundo=tm.tm_sec;
-
-
-
-    //int hora_actual = ((info->tm_hour-CST)%24)*3600+(info->tm_min)*60+(info->tm_sec);
-
-    int hora_actual = ((_hora)%24)*3600+(_minuto)*60+(_segundo);
+   
+    int hora_actual = ((info->tm_hour-CST)%24)*3600+(info->tm_min)*60+(info->tm_sec);
     return hora_actual;
 }
 
 void horarios_Init( StackPtr this, StackPtr other ){
     int hora1 = Get_hora_actual();
-    printf("\n**HORA ACTUAL: %d **\n", hora1);
     int hora2 = hora1 + 1200;
 
     srand( time(NULL) );

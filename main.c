@@ -44,7 +44,6 @@ void pantalla(char nom[])
     pant=fopen("princi.txt","r");
     for(n=0;n<R;n++)
      {
-        //Sleep(20);
         for(m=0;m<C;m++)
         {
             mtr[n][m]=fgetc(pant);
@@ -84,17 +83,18 @@ void pantalla(char nom[])
  * @param Apuntador de tipo void
  */
 void* notifArrivos(void* arg){
-    int* hora_arrivo = (int*) arg;
+    int hora_arrivo = *((int *) arg);
     int hora_actual = 0;
 
-    while(*hora_arrivo != hora_actual){
+    while(hora_arrivo != hora_actual){
         hora_actual = Get_hora_actual();
     }
-    printf("\n\t---------------------------\n");
-    printf("\n\t**...AVION ATERRIZANDO...**\n");
-    printf("\n\t---------------------------\n\n");
-    printf("Opcion Menu @: ");
-    sleep(1);
+    printf("\n\t---------------------------------"
+           "\n\t**..AVION SOLICITA ATERRIZAJE..**"
+           "\n\t---------------------------------"
+           "\n\tSelecciona una opcion:\n");
+    sleep(2);
+    free(arg);
     return NULL;
 }
 
@@ -103,17 +103,18 @@ void* notifArrivos(void* arg){
  * @param Apuntador de tipo void
  */
 void* notifDespegues(void* arg){
-    int* hora_despegue = (int*) arg;
+    int hora_despegue = *((int *) arg);
     int hora_actual = 0;
 
-    while(*hora_despegue != hora_actual){
+    while(hora_despegue != hora_actual){
         hora_actual = Get_hora_actual();
     }
-    printf("\n\t--------------------------\n");
-    printf("\n\t**...AVION DESPEGANDO...**\n");
-    printf("\n\t--------------------------\n");
-    printf("Opcion Menu @: ");
-    sleep(1);
+    printf("\n\t-------------------------------"
+           "\n\t**..AVION SOLICITA DESPEGUE..**"
+           "\n\t-------------------------------"
+           "\n\tSelecciona una opcion:\n");
+    sleep(2);
+    free(arg);
     return NULL;
 }
 
@@ -157,9 +158,6 @@ int main(void){
     pantalla("princi.txt");
     setbuf(stdin,NULL);
     getchar();  
-
-    /**< variables para el reloj general */
-    int hra,min;
 
     /**< Archivo Aterrizajes */
     FILE *reporteAt; 	
@@ -206,7 +204,7 @@ int main(void){
     /**< pila de horarios de llegada */
     StackPtr horarios_llegada = Stack_New( 0 );
     /**< llenanado de pilas de horarios */
-    horarios_Init( horarios_salida,horarios_llegada);
+    horarios_Init( horarios_salida, horarios_llegada );
 
     /**< creacion de algunos aviones danados */
     Item avi1=(Avion){"BoingMX2",0,250,3,0,0};
@@ -223,6 +221,7 @@ int main(void){
     /**< creacion de algunos aviones para aterrizaje */
     int dif = 7200; /**< Dos horas de diferencia con respecto a los despegues */
     Item avi6=(Avion){"Aero1",150,300,1,Stack_Pop(horarios_salida)-dif,Stack_Pop(horarios_llegada)-dif};
+    //Item avi6=(Avion){"Aero1",150,300,1, Get_hora_actual()-1000, Get_hora_actual()+10 };
     Item avi7=(Avion){"Aero2",220,320,1,Stack_Pop(horarios_salida)-dif,Stack_Pop(horarios_llegada)-dif};
     Item avi8=(Avion){"Aero3",260,350,1,Stack_Pop(horarios_salida)-dif,Stack_Pop(horarios_llegada)-dif};
     Item avi9=(Avion){"Aero4",250,380,1,Stack_Pop(horarios_salida)-dif,Stack_Pop(horarios_llegada)-dif};
@@ -245,9 +244,14 @@ int main(void){
     Pista_Landing(pista2,avi11);
     Pista_Landing(pista2,avi12);
 
-    /**< Definiendo los dos hilos (prcesos) */
+    /**< Definiendo los dos hilos (procesos) */
     pthread_t proceso1;
     pthread_t proceso2;
+
+    /**< variables para el reloj de inicio*/
+    int hra,min;
+    Obtiene_reloj(&hra,&min);
+    printf("\nHora de inicio: %02d:%02d\n",hra,min );
 
     while (1)
     {  
@@ -259,8 +263,10 @@ int main(void){
             Item prox_arrivo;
             DLL_CursorLast( entrada );
             DLL_Peek( entrada, &prox_arrivo );
-            int arrivo_temp = prox_arrivo.hora_llegada;
-            pthread_create(&proceso1, NULL, notifArrivos, &arrivo_temp );
+            int *arg_arrivo = malloc( sizeof(int) );
+            *arg_arrivo = prox_arrivo.hora_llegada;
+
+            pthread_create(&proceso1, NULL, notifArrivos, arg_arrivo);
         }
 
         /**< Notifica sobre el proximo despegue (proceso 2) */
@@ -268,16 +274,13 @@ int main(void){
             Item prox_despegue;
             DLL_CursorLast( pista2->track );
             DLL_Peek( pista2->track, &prox_despegue );
-            int despegue_temp = prox_despegue.hora_salida;
+            int *arg_despegue = malloc( sizeof(int) );
+            *arg_despegue = prox_despegue.hora_salida;
 
-            pthread_create(&proceso2, NULL, notifDespegues, &despegue_temp );
+            pthread_create(&proceso2, NULL, notifDespegues, arg_despegue);
         }
 
         printf("\t\tSISTEMA DE ADMINISTRACION AEROPORTUARIA TORRE DE CONTROL\n\n");
-        
-        Obtiene_reloj(&hra,&min);
-
-        printf("\nHora de inicio: %02d:%02d\n",hra,min );
 
         /**< CASO Particular de Fenomeno Meteorologico */
      	static int stop = 1;
@@ -657,9 +660,6 @@ int main(void){
                     	printf ("Presione Enter para regresar al menu principal\n"); 
                    		setbuf(stdin, NULL);
                     	getchar();
-                    }
-                    else{
-                    	break; 
                     }
                     
                     break;

@@ -268,7 +268,6 @@ bool DLL_RemoveBefore( DLLPtr this, ItemPtr _data_back )
         }else if(this->cursor == this->first)
         {
             done=false;
-            //no se puede hacer la operación si el cursor esta en first
         
 		}else{
 
@@ -435,4 +434,3 @@ void DLL_Sort(DLLPtr other){
 
 	free(arreglo_aux);
 }
-
