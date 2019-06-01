@@ -220,8 +220,7 @@ int main(void){
   
     /**< creacion de algunos aviones para aterrizaje */
     int dif = 7200; /**< Dos horas de diferencia con respecto a los despegues */
-    Item avi6=(Avion){"Aero1",150,300,1,Stack_Pop(horarios_salida)-dif,Stack_Pop(horarios_llegada)-dif};
-    //Item avi6=(Avion){"Aero1",150,300,1, Get_hora_actual()-1000, Get_hora_actual()+10 };
+    Item avi6=(Avion){"Aero1",150,300,1, Get_hora_actual()-1000, Get_hora_actual()+20 }; //Avion prueba
     Item avi7=(Avion){"Aero2",220,320,1,Stack_Pop(horarios_salida)-dif,Stack_Pop(horarios_llegada)-dif};
     Item avi8=(Avion){"Aero3",260,350,1,Stack_Pop(horarios_salida)-dif,Stack_Pop(horarios_llegada)-dif};
     Item avi9=(Avion){"Aero4",250,380,1,Stack_Pop(horarios_salida)-dif,Stack_Pop(horarios_llegada)-dif};
@@ -318,7 +317,7 @@ int main(void){
  
             case 0:
                 {
-                 
+                    printf ("\nCerrando sesion\nGenerando archivo de reporte\n");
                     /**< liberando memoria dinamica */
                     DLL_Delete(danados);
                     DLL_Delete(disponible);

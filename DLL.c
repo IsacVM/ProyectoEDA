@@ -25,7 +25,7 @@ void print( Item item )
     printf("Hora salida: %02d:%02d\n",h1,m1);
     printf("Hora llegada: %02d:%02d\n",h2,m2);
     printf("\n\n");
-    sleep(1);
+    sleep(0.8);
 }
 
 static NodePtr newNode( Item _data )

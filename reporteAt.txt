@@ -3,3 +3,5 @@
 
 						ATERRIZAJES
 Nombre:		Pasajeros:		Capacidad:		Hora Llegada:		Hora Salida:
+
+Aero1			150			300			18:27			18:10			
