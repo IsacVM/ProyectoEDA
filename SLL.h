@@ -1,7 +1,7 @@
 /**
  * @file SLL.h
  * @Author Team
- * @date mayo 2019
+ * @date 1 junio 2019
  * @brief Proyecto - EDA-I
  * @note Grupo: 0007, Semestre 2019-2
  */
